@@ -1,6 +1,6 @@
-// import 'package:six_cash/util/app_constants.dart';
+// import 'package:sanaa_fi_saas/utils/app_constants.dart';
 import 'package:get/get.dart';
-import 'package:sanaa_saas/utils/app_constants.dart';
+import 'package:sanaa_fi_saas/utils/app_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeController extends GetxController {

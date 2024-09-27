@@ -1,12 +1,12 @@
 import 'package:get/get.dart';
-// import 'package:six_cash/common/models/language_model.dart';
-// import 'package:six_cash/common/models/on_boarding_model.dart';
-// import 'images.dart';
+import 'package:sanaa_fi_saas/common/models/language_model.dart';
+import 'package:sanaa_fi_saas/common/models/on_boarding_model.dart';
+import 'images.dart';
 
 class AppConstants {
   static const String appName = 'Field Agent';
-  static const String baseUrl = 'https://finmicro.sanaa.co';
-  // static const String baseUrl = 'https://lendsup.sanaa.co';
+  // static const String baseUrl = 'https://finmicro.sanaa.co';
+  static const String baseUrl = 'https://lendsup.sanaa.co';
   static const bool demo = false;
   static const double appVersion = 4.3;
 
@@ -18,6 +18,11 @@ class AppConstants {
     static const String addClientLoan = '/api/v1/create-loans';
     static const String getClientsProfile = '/api/v1/getClient';
     static const String getClientsLoans = '/api/v1/clientLoans';
+
+    // getClientLoansHistory
+    static const String getClientLoansHistory = '/api/v1/clientLoanspayHistory';
+
+
       static const String getcustomerDataUri = '/api/v1/getUserByPhone';
       static const String clientguarantorsList = '/api/v1/clientguarantorsList';
 
@@ -125,30 +130,30 @@ static const String payLoan = '/api/v1/loans/pay';
   //input balance digit length
   static const int balanceInputLen = 10;
 
-  // static List<LanguageModel> languages = [
-  //   LanguageModel(imageUrl: Images.english, languageName: 'English', countryCode: 'US', languageCode: 'en'),
-  //   LanguageModel(imageUrl: Images.saudi, languageName: 'Arabic', countryCode: 'SA', languageCode: 'ar'),
+  static List<LanguageModel> languages = [
+    LanguageModel(imageUrl: Images.english, languageName: 'English', countryCode: 'US', languageCode: 'en'),
+    LanguageModel(imageUrl: Images.saudi, languageName: 'Arabic', countryCode: 'SA', languageCode: 'ar'),
 
-  // ];
+  ];
 
-  // static  List<OnboardModel> onboardList = [
-  //   OnboardModel(
-  //     Images.onboardImage1,
-  //     Images.onboardBackground1,
-  //     'on_boarding_title_1'.tr,
-  //     '${'send_money_from'.tr} $appName ${'easily_at_anytime'.tr}',
-  //   ),
+  static  List<OnboardModel> onboardList = [
+    OnboardModel(
+      Images.onboardImage1,
+      Images.onboardBackground1,
+      'on_boarding_title_1'.tr,
+      '${'send_money_from'.tr} $appName ${'easily_at_anytime'.tr}',
+    ),
 
-  //   OnboardModel(
-  //     Images.onboardImage2, Images.onboardBackground2,
-  //     'on_boarding_title_2'.tr,
-  //     'withdraw_money_is_even_more'.tr,
-  //   ),
-  //   OnboardModel(
-  //     Images.onboardImage3,
-  //     Images.onboardBackground3,
-  //     'on_boarding_title_3'.tr,
-  //     '${'request_for_money_using'.tr} $appName ${'account_to_any_friend'.tr}',
-  //   ),
-  // ];
+    OnboardModel(
+      Images.onboardImage2, Images.onboardBackground2,
+      'on_boarding_title_2'.tr,
+      'withdraw_money_is_even_more'.tr,
+    ),
+    OnboardModel(
+      Images.onboardImage3,
+      Images.onboardBackground3,
+      'on_boarding_title_3'.tr,
+      '${'request_for_money_using'.tr} $appName ${'account_to_any_friend'.tr}',
+    ),
+  ];
 }

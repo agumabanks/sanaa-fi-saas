@@ -13,14 +13,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
     CreateAndAttachConsole();
   }
 
-
-  // Set the minimum window size
-  HWND hwnd = window.GetHandle();
-  MINMAXINFO minMaxInfo = {};
-  minMaxInfo.ptMinTrackSize.x = GetSystemMetrics(SM_CXSCREEN) / 2; // Half screen width
-  minMaxInfo.ptMinTrackSize.y = 600; // 600 pixels height
-
-
   // Initialize COM, so that it is available for use in the library and/or
   // plugins.
   ::CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
@@ -35,7 +27,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   FlutterWindow window(project);
   Win32Window::Point origin(10, 10);
   Win32Window::Size size(1280, 720);
-  if (!window.Create(L"sanaa_saas", origin, size)) {
+  if (!window.Create(L"sanaa_os", origin, size)) {
     return EXIT_FAILURE;
   }
   window.SetQuitOnClose(true);
