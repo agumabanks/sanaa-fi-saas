@@ -1,30 +1,76 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:sanaa_fi_saas/data/api/api_client.dart';
+import 'package:sanaa_fi_saas/features/Loans/controllers/LoanController.dart';
+import 'package:sanaa_fi_saas/features/Loans/controllers/allLoansControllers.dart';
+import 'package:sanaa_fi_saas/features/Loans/data/loansRepo.dart';
 import 'package:sanaa_fi_saas/features/clients/controller/ClientController.dart';
-import 'package:sanaa_fi_saas/features/home/views/content_view.dart';
-import 'package:sanaa_fi_saas/features/home/views/home.dart';
-import 'package:sanaa_fi_saas/features/home/views/sideBar.dart';
-// import 'package:window_size/window_size.dart'; // Add window size package
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:sanaa_fi_saas/features/clients/controller/client_profile_controller.dart';
+import 'package:sanaa_fi_saas/features/clients/data/client_repo.dart';
 import 'package:sanaa_fi_saas/features/home/controllers/ContentController.dart';
-// import 'content_controller.dart'; // Import the ContentController
-// import 'sideBar.dart'; // Import the Sidebar
+import 'package:sanaa_fi_saas/features/home/views/home.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Get screen size to calculate the minimum width
-  final screenWidth = WidgetsBinding.instance.window.physicalSize.width;
+  // Initialize GetStorage and SharedPreferences
+  await GetStorage.init();
+  final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
-  // setWindowMinSize(Size(screenWidth / 2, 600)); // Minimum width to 1/2 of the screen, height 600px
+  // Get device info and generate uniqueId
+  final BaseDeviceInfo deviceInfo = await DeviceInfoPlugin().deviceInfo;
+  final uniqueId = Uuid().v4(); // Generate unique ID
+
+  // Register ApiClient
+  Get.lazyPut<ApiClient>(() => ApiClient(
+        appBaseUrl: 'https://lendsup.sanaa.co/api/v1',
+        sharedPreferences: sharedPreferences,
+        deiceInfo: deviceInfo,
+        uniqueId: uniqueId,
+      ));
+
+  // Register Repositories (Repo must be registered before Controllers)
+  // Get.lazyPut<ClientRepo>(() => ClientRepo(apiClient: Get.find<ApiClient>()));
+  // Get.lazyPut<LoanRepo>(() => LoanRepo(apiClient: Get.find<ApiClient>())); // Register LoanRepo here
+
+  // // Register Controllers
+  // Get.lazyPut<ClientController>(() => ClientController(clientRepo: Get.find<ClientRepo>()));
+  // Get.lazyPut<ClientProfileController>(() => ClientProfileController(clientRepo: Get.find<ClientRepo>()));
+  // Get.lazyPut<ContentController>(() => ContentController());
+  // Get.lazyPut<LoanController>(() => LoanController(loanRepo: Get.find<LoanRepo>()));
+
+
+   // Register Repositories
+  Get.lazyPut<ClientRepo>(() => ClientRepo(apiClient: Get.find<ApiClient>()));
+  // Get.lazyPut<LoanRepo>(() => LoanRepo(apiClient: Get.find<ApiClient>()));
+  Get.lazyPut(() => LoanRepo(apiClient: Get.find()));
+
+
+  // Register Controllers
+  Get.lazyPut(()=>ClientProfileController(clientRepo: Get.find()));
+  Get.lazyPut<ClientController>(() => ClientController(clientRepo: Get.find<ClientRepo>()));
+
+  // AllLoansController
+    // Get.lazyPut<AllLoansController>(() => AllLoansController(clientRepo: Get.find<ClientRepo>()));
+
+  // Get.lazyPut<LoanController>(() => LoanController(loanRepo: Get.find<LoanRepo>()));
+  // Get.put<LoanController>(LoanController(loanRepo: Get.find<LoanRepo>()));
+    Get.lazyPut(() => LoanController(loanRepo: Get.find()));
+    Get.lazyPut(() => AllLoansController(loanRepo: Get.find()));
+      // Get.lazyPut(() => NotificationController(notificationRepo: Get.find()));
+
+
+
+
 
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-    final ClientController clientController = Get.put(ClientController());
-
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(

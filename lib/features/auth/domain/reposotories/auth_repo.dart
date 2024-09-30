@@ -130,25 +130,22 @@ Future<Response> getCustomerData ({String? phoneNumber}) async {
    Future<Response> updateToken() async {
      String? deviceToken;
      if (GetPlatform.isIOS) {
-       NotificationSettings settings = await FirebaseMessaging.instance.requestPermission(
-         alert: true, announcement: false, badge: true, carPlay: false,
-         criticalAlert: false, provisional: false, sound: true,
-       );
-       if(settings.authorizationStatus == AuthorizationStatus.authorized) {
+     
+       if(true) {
          deviceToken = await _saveDeviceToken();
-         FirebaseMessaging.instance.subscribeToTopic(AppConstants.all);
-         FirebaseMessaging.instance.subscribeToTopic(AppConstants.users);
+        //  FirebaseMessaging.instance.subscribeToTopic(AppConstants.all);
+        //  FirebaseMessaging.instance.subscribeToTopic(AppConstants.users);
          debugPrint('=========>Device Token ======$deviceToken');
        }
      }else {
        deviceToken = await _saveDeviceToken();
-       FirebaseMessaging.instance.subscribeToTopic(AppConstants.all);
-       FirebaseMessaging.instance.subscribeToTopic(AppConstants.users);
+      //  FirebaseMessaging.instance.subscribeToTopic(AppConstants.all);
+      //  FirebaseMessaging.instance.subscribeToTopic(AppConstants.users);
        debugPrint('=========>Device Token ======$deviceToken');
      }
      if(!GetPlatform.isWeb) {
-       FirebaseMessaging.instance.subscribeToTopic(AppConstants.all);
-       FirebaseMessaging.instance.subscribeToTopic(AppConstants.users);
+      //  FirebaseMessaging.instance.subscribeToTopic(AppConstants.all);
+      //  FirebaseMessaging.instance.subscribeToTopic(AppConstants.users);
      }
      return await apiClient.postData(AppConstants.tokenUri, {"_method": "put", "token": deviceToken});
    }
@@ -157,7 +154,7 @@ Future<Response> getCustomerData ({String? phoneNumber}) async {
    Future<String?> _saveDeviceToken() async {
      String? deviceToken = '';
      if(!GetPlatform.isWeb) {
-       deviceToken = (await FirebaseMessaging.instance.getToken())!;
+      //  deviceToken = (await FirebaseMessaging.instance.getToken())!;
      }
      return deviceToken;
    }
@@ -222,22 +219,22 @@ Future<Response> getCustomerData ({String? phoneNumber}) async {
      return sharedPreferences.getBool(AppConstants.biometricAuth) ?? true;
    }
 
-   final FlutterSecureStorage _storage = const FlutterSecureStorage();
+  //  final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
-   IOSOptions _getIOSOptions() => const IOSOptions(
-     accessibility: KeychainAccessibility.first_unlock,
-   );
+  //  IOSOptions _getIOSOptions() => const IOSOptions(
+  //    accessibility: KeychainAccessibility.first_unlock,
+  //  );
 
-   AndroidOptions _getAndroidOptions() => const AndroidOptions(
-     encryptedSharedPreferences: true,
-   );
+  //  AndroidOptions _getAndroidOptions() => const AndroidOptions(
+  //    encryptedSharedPreferences: true,
+  //  );
 
    Future<String> readSecureData(String key) async {
      String value = "";
      try {
-      String value0 = await (_storage.read(key: key, aOptions: _getAndroidOptions(), iOptions: _getIOSOptions())) ?? "";
-       String decodeValue =  utf8.decode(base64Url.decode(value0));
-       value = decodeValue.replaceRange(4, decodeValue.length, '');
+      // String value0 = await (_storage.read(key: key, aOptions: _getAndroidOptions(), iOptions: _getIOSOptions())) ?? "";
+      //  String decodeValue =  utf8.decode(base64Url.decode(value0));
+      //  value = decodeValue.replaceRange(4, decodeValue.length, '');
 
      } catch (e) {
        debugPrint('error ===> $e');
@@ -248,7 +245,7 @@ Future<Response> getCustomerData ({String? phoneNumber}) async {
 
    Future<void> deleteSecureData(String key) async {
      try {
-       await _storage.delete(key: key, iOptions: _getIOSOptions(), aOptions: _getAndroidOptions());
+      //  await _storage.delete(key: key, iOptions: _getIOSOptions(), aOptions: _getAndroidOptions());
      } catch (e) {
        debugPrint('error ===> $e');
      }
@@ -259,19 +256,19 @@ Future<Response> getCustomerData ({String? phoneNumber}) async {
      String uniqueKey = base64Encode(utf8.encode('${UniqueKey().toString()}${UniqueKey().toString()}'));
      String storeValue = base64Encode(utf8.encode('$value $uniqueKey'));
      try {
-       await _storage.write(
-         key: key,
-         value: storeValue,
-         iOptions: _getIOSOptions(),
-         aOptions: _getAndroidOptions(),
-       );
+      //  await _storage.write(
+      //    key: key,
+      //    value: storeValue,
+      //    iOptions: _getIOSOptions(),
+      //    aOptions: _getAndroidOptions(),
+      //  );
      } catch (e) {
        debugPrint('error from : repo : $e');
      }
    }
 
    Future<bool> containsKeyInSecureData(String key) async {
-     var containsKey = await _storage.containsKey(key: key, aOptions: _getAndroidOptions(), iOptions: _getIOSOptions());
+     var containsKey = true;//await _storage.containsKey(key: key, aOptions: _getAndroidOptions(), iOptions: _getIOSOptions());
      return containsKey;
    }
 
