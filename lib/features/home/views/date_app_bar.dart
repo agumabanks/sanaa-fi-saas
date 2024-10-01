@@ -25,7 +25,7 @@ class DateAppBar extends StatelessWidget implements PreferredSizeWidget {
         title,
         style: TextStyle(color: Colors.black), // Set title text color to black
       ),
-      // centerTitle: centerTitle,
+      centerTitle: false,
       actions: [
         // Display the date on the AppBar
         Obx(

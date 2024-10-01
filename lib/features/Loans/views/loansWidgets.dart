@@ -137,7 +137,9 @@ class LoansHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Expanded(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Expanded(
             flex: 8,
             child: Padding(
               padding: const EdgeInsets.all(16.0),

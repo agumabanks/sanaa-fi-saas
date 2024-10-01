@@ -38,14 +38,14 @@ class PendingLoansPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        loan.agent?.name ?? 'Unknown Agent',
+                        loan.client?.name ?? 'Unknown Agent',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       const SizedBox(height: 4),
-                      Text('Client: ${loan.client?.name ?? 'Unknown Client'}'),
+                      Text('Agent: ${loan.agent?.name ?? 'Unknown Client'}'),
                       Text('Amount: ${(loan.amount != null) ? NumberFormat("#,##0").format(double.parse(loan.amount.toString())) : 'N/A'}'),
                       Text('Status: ${_getLoanStatus(loan.status)}'),
                     ],
@@ -107,9 +107,8 @@ class PendingLoansPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Pending Loans'),
-      ),
+      backgroundColor: Colors.white,
+      
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
