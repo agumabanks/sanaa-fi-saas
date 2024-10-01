@@ -1,24 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sanaa_fi_saas/features/Loans/controllers/LoanController.dart';
-import 'package:sanaa_fi_saas/features/Loans/controllers/allLoansControllers.dart';
 import 'package:intl/intl.dart';
-
-class AllLoansPage extends StatelessWidget {
-  final AllLoansController loanController = Get.find<AllLoansController>();
+import 'package:sanaa_fi_saas/features/Loans/controllers/allLoansControllers.dart';
+ 
+class PendingLoansPage extends StatelessWidget {
+  final AllLoansController loanController = Get.put(AllLoansController(loanRepo: Get.find())); // Inject the controller
   final TextEditingController searchController = TextEditingController();
   final ScrollController scrollController = ScrollController();
 
-  double value = 300000.00000000;
-  // String formattedValue = NumberFormat("#,##0.00").format(value); 
-
-  AllLoansPage({Key? key}) : super(key: key) {
+  PendingLoansPage({Key? key}) : super(key: key) {
     // Infinite scroll listener to load more loans when reaching the bottom
     scrollController.addListener(() {
       if (scrollController.position.pixels == scrollController.position.maxScrollExtent &&
           !loanController.isLoading.value &&
           loanController.currentPage.value < loanController.totalPages.value) {
-        loanController.loadMoreLoans();
+        loanController.fetchPendingLoans(page: loanController.currentPage.value + 1);
       }
     });
   }
@@ -51,7 +47,6 @@ class AllLoansPage extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text('Client: ${loan.client?.name ?? 'Unknown Client'}'),
                       Text('Amount: ${(loan.amount != null) ? NumberFormat("#,##0").format(double.parse(loan.amount.toString())) : 'N/A'}'),
-
                       Text('Status: ${_getLoanStatus(loan.status)}'),
                     ],
                   ),
@@ -63,9 +58,7 @@ class AllLoansPage extends StatelessWidget {
                       icon: const Icon(Icons.visibility),
                       onPressed: () {
                         // Implement view functionality
-                        // currentPage
                         loanController.viewLoan(loan.id!);
-                        // Get.find<LoanController>().changePage(4);
                       },
                       tooltip: 'View Loan',
                     ),
@@ -115,7 +108,7 @@ class AllLoansPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('All Loans'),
+        title: const Text('Pending Loans'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -132,14 +125,16 @@ class AllLoansPage extends StatelessWidget {
                       border: OutlineInputBorder(),
                     ),
                     onSubmitted: (value) {
-                      loanController.searchLoans(value);
+                      loanController.searchQuery.value = value;
+                      loanController.fetchPendingLoans(page: 1);
                     },
                   ),
                 ),
                 const SizedBox(width: 10),
                 ElevatedButton(
                   onPressed: () {
-                    loanController.searchLoans(searchController.text);
+                    loanController.searchQuery.value = searchController.text;
+                    loanController.fetchPendingLoans(page: 1);
                   },
                   child: const Text('Search'),
                 ),
@@ -148,6 +143,7 @@ class AllLoansPage extends StatelessWidget {
                   onPressed: () {
                     searchController.clear();
                     loanController.clearSearch();
+                    loanController.fetchPendingLoans(page: 1);
                   },
                   child: const Text('Clear'),
                 ),
@@ -160,7 +156,7 @@ class AllLoansPage extends StatelessWidget {
                 if (loanController.isLoading.value && loanController.loans.isEmpty) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (loanController.loans.isEmpty) {
-                  return const Center(child: Text('No loans found.'));
+                  return const Center(child: Text('No pending loans found.'));
                 } else {
                   return buildLoanList();
                 }

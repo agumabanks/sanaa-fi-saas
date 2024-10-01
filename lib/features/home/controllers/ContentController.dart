@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:sanaa_fi_saas/features/Loans/views/loansScreen.dart';
 import 'package:sanaa_fi_saas/features/Reports/views/reportsScreen.dart';
 import 'package:sanaa_fi_saas/features/Savings/views/SavingsScreen.dart';
+import 'package:sanaa_fi_saas/features/clients/views/ClientProfile.dart';
+import 'package:sanaa_fi_saas/features/clients/views/client_profile_screen.dart';
 import 'package:sanaa_fi_saas/features/clients/views/clientsScreen.dart';
 import 'package:sanaa_fi_saas/features/create/views/Dashboard.dart';
 import 'package:sanaa_fi_saas/features/expense/views/expense.dart';
@@ -23,6 +25,8 @@ class ContentController extends GetxController {
     ReportsPage(),
     ExpensePage(),
     SettingPage(),
+    ClientProfile()
+    // ClientProfileScreen(clientId: client!.id!),
     
   ];
 

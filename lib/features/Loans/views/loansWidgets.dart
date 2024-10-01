@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
-class PendingLoansPage extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:sanaa_fi_saas/features/Loans/controllers/allLoansControllers.dart';
+ 
+
+class PendingLoansPage2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,7 +18,6 @@ class PendingLoansPage extends StatelessWidget {
     );
   }
 }
-
 
 class RunningLoansPage extends StatelessWidget {
   @override
@@ -41,6 +45,86 @@ class RejectedLoansPage extends StatelessWidget {
       ),
       body: Center(
         child: Text('Display RejectedLoansPage Loans Here'),
+      ),
+    );
+  }
+}
+
+
+
+class PaidLoansPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('RejectedLoansPage Loans'),
+      ),
+      body: Center(
+        child: Text('paid Loans Here'),
+      ),
+    );
+  }
+}
+
+class  LoansPlansPage2 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('RejectedLoansPage Loans'),
+      ),
+      body: Center(
+        child: Text('Plans Loans Here'),
+      ),
+    );
+  }
+}
+
+ 
+class LoansPlansPage extends StatelessWidget {
+  final AllLoansController loanPlanController = Get.put(AllLoansController(loanRepo:Get.find())); // Inject the controller
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Loan Plans'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Obx(() {
+          if (loanPlanController.isLoading.value) {
+            return Center(child: CircularProgressIndicator()); // Show loading indicator
+          } else if (loanPlanController.isError.value) {
+            return Center(child: Text(loanPlanController.errorMessage.value)); // Show error message
+          } else if (loanPlanController.loanPlans.value == null || loanPlanController.loanPlans.value!.isEmpty) {
+            return Center(child: Text('No loan plans available.')); // No data message
+          } else {
+            // Display the loan plans
+            return ListView.builder(
+              itemCount: loanPlanController.loanPlans.value!.length,
+              itemBuilder: (context, index) {
+                final plan = loanPlanController.loanPlans.value![index];
+                return Card(
+                  margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  child: ListTile(
+                    title: Text(plan.planName ?? 'No Plan Name'),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Min Amount: ${plan.minAmount ?? 'N/A'}'),
+                        Text('Max Amount: ${plan.maxAmount ?? 'N/A'}'),
+                        Text('Installments: ${plan.totalInstallments ?? 'N/A'}'),
+                        Text('Installment Interval: ${plan.installmentInterval} days'),
+                        Text('Instructions: ${plan.instructions ?? 'No Instructions'}'),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          }
+        }),
       ),
     );
   }

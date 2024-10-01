@@ -5,6 +5,8 @@ import 'package:sanaa_fi_saas/features/Loans/data/loanModal.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/loansRepo.dart';
 import 'package:sanaa_fi_saas/features/Loans/views/allLoans.dart';
 import 'package:sanaa_fi_saas/features/Loans/views/loansWidgets.dart';
+import 'package:sanaa_fi_saas/features/Loans/views/pendingLoanss.dart';
+import 'package:sanaa_fi_saas/features/Loans/views/viewLoan.dart';
 
 class LoanController extends GetxController {
   final LoanRepo loanRepo;
@@ -21,9 +23,13 @@ class LoanController extends GetxController {
   // List of pages corresponding to each loan type
   final List<Widget> pages = [
     LoansHome(),
-    AllLoansPage(),  // Page for pending loans
-    RejectedLoansPage(), // Page for rejected loans
-    RunningLoansPage(),  // Page for running loans
+    AllLoansPage(),
+    PendingLoansPage(),
+    RunningLoansPage(),   
+    RejectedLoansPage(),
+    PaidLoansPage(),  
+    LoansPlansPage(),
+    ViewLoan()
   ];
 
   // Method to change the page based on index
@@ -32,19 +38,10 @@ class LoanController extends GetxController {
   }
   @override
   void onInit() {
-    fetchAllLoans();  // Automatically fetch loans when the controller is initialized
+    // fetchAllLoans();  // Automatically fetch loans when the controller is initialized
     super.onInit();
   }
 
-  // Fetch all loans from the LoanRepo
-  void fetchAllLoans() async {
-    isLoading.value = true;
-    AllLoans? allLoans = await loanRepo.getAllLoans();  // Fetch all loans
-    if (allLoans != null && allLoans.data != null) {
-      loans.addAll(allLoans.data!.data!);  // Populate loans list with the fetched data
-    }
-    isLoading.value = false;
-  }
 
   // Search functionality
   void searchLoans(String query) {

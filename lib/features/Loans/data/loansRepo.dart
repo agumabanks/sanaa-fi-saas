@@ -4,14 +4,10 @@ import 'package:sanaa_fi_saas/data/api/api_client.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/AllLoanPlans.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/ClientLoanDetails.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/ClientLoanspayHistory.dart';
+import 'package:sanaa_fi_saas/features/Loans/data/PendingLoansModal.dart';
+import 'package:sanaa_fi_saas/features/Loans/data/allLoansModal.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/loanModal.dart';
-import 'package:sanaa_fi_saas/features/clients/data/client_profile.dart';
-// Import your loan models here
-// import 'package:sanaa_fi_saas/features/loans/data/all_loans.dart';
-// Import other models as needed
-// import 'package:sanaa_fi_saas/features/clients/data/client.dart';
-// import 'package:sanaa_fi_saas/features/loans/data/loan_plan.dart';
-// import 'package:sanaa_fi_saas/features/loans/data/loan_installment.dart';
+import 'package:sanaa_fi_saas/features/Loans/data/viewLoanModal.dart';
 
 class LoanRepo {
   final ApiClient apiClient;
@@ -20,9 +16,10 @@ class LoanRepo {
   LoanRepo({required this.apiClient});
 
   // Fetch all loans with optional search query
-  Future<AllLoans?> getAllLoans({String? search, int page = 1}) async {
+Future<AllLoansModal?> getAllLoans({String? search, int page = 1}) async {
+  try {
     final response = await apiClient.getData(
-      '/dloans/all',
+      '/d/loans/all',
       query: {
         if (search != null && search.isNotEmpty) 'search': search,
         'page': page.toString(),
@@ -30,234 +27,252 @@ class LoanRepo {
     );
 
     if (response.statusCode == 200) {
-      // Parse the JSON response into AllLoans
-      AllLoans allLoans = AllLoans.fromJson(response.body);
-
-      // Cache the data for offline access
-      storage.write('loans_page_$page', response.body);
-
+      // Corrected variable name from 'AllLoAllLoansModalans' to 'AllLoansModal'
+      AllLoansModal allLoans = AllLoansModal.fromJson(response.body);
+      storage.write('loans_page_$page', response.body); // Cache data
       return allLoans;
     } else {
-      // Attempt to retrieve cached data
+      // Fallback to cache if API fails
       final cachedData = storage.read('loans_page_$page');
       if (cachedData != null) {
-        return AllLoans.fromJson(cachedData);
+        return AllLoansModal.fromJson(cachedData);
       }
-      return null;
     }
+  } catch (e) {
+    print("Error fetching loans: $e");
   }
+  return null;
+}
 
- // Get loan details by ID
-  Future<ClientLoanDetails?> getLoanById(int id) async {
-    final response = await apiClient.getData('/d/dloans/$id/show');
+
+// Fetch all Pending loans with optional search query
+Future<PendingLoansModal?> getPendingLoans({String? search, int page = 1}) async {
+  try {
+    final response = await apiClient.getData(
+      '/d/loans/pending',
+      query: {
+        if (search != null && search.isNotEmpty) 'search': search,
+        'page': page.toString(),
+      },
+    );
 
     if (response.statusCode == 200) {
-      // Parse the JSON response into ClientLoanDetails
-      ClientLoanDetails loanDetails = ClientLoanDetails.fromJson(response.body);
-      return loanDetails;
+      // Corrected variable name from 'AllLoAllLoansModalans' to 'AllLoansModal'
+      PendingLoansModal allLoans = PendingLoansModal.fromJson(response.body);
+      storage.write('loans_page_$page', response.body); // Cache data
+      return allLoans;
     } else {
-      return null;
+      // Fallback to cache if API fails
+      final cachedData = storage.read('loans_page_$page');
+      if (cachedData != null) {
+        return PendingLoansModal.fromJson(cachedData);
+      }
     }
+  } catch (e) {
+    print("Error fetching loans: $e");
   }
+  return null;
+}
 
+
+  // Get loan details by ID
+  Future<ViewLoanModal?> getLoanById(int id) async {
+    try {
+      final response = await apiClient.getData('/d/loans/$id/show');
+      if (response.statusCode == 200) {
+        return ViewLoanModal.fromJson(response.body);
+      }
+    } catch (e) {
+      print("Error fetching loan details: $e");
+    }
+    return null;
+  }
 
   // Create a new loan
   Future<Response> createLoan(Map<String, dynamic> loanData) async {
-    return await apiClient.postData('/dloans/create', loanData);
+    try {
+      return await apiClient.postData('/dloans/create', loanData);
+    } catch (e) {
+      print("Error creating loan: $e");
+      rethrow;
+    }
   }
 
   // Update an existing loan by ID
   Future<Response> updateLoan(int id, Map<String, dynamic> updatedData) async {
-    return await apiClient.putData('/dloans/save-edit/$id', updatedData);
+    try {
+      return await apiClient.putData('/dloans/save-edit/$id', updatedData);
+    } catch (e) {
+      print("Error updating loan: $e");
+      rethrow;
+    }
   }
 
   // Delete a loan by ID
   Future<Response> deleteLoan(int id) async {
-    return await apiClient.deleteData('/dloans/$id');
+    try {
+      return await apiClient.deleteData('/dloans/$id');
+    } catch (e) {
+      print("Error deleting loan: $e");
+      rethrow;
+    }
   }
 
   // Get loans for a specific client
   Future<AllLoans?> getClientLoans(int clientId) async {
-    final response = await apiClient.getData('/dclients/$clientId/loans');
-    if (response.statusCode == 200) {
-      // Assuming the response structure is similar to AllLoans
-      AllLoans clientLoans = AllLoans.fromJson(response.body);
-      return clientLoans;
-    } else {
-      return null;
+    try {
+      final response = await apiClient.getData('/dclients/$clientId/loans');
+      if (response.statusCode == 200) {
+        return AllLoans.fromJson(response.body);
+      }
+    } catch (e) {
+      print("Error fetching client loans: $e");
     }
+    return null;
   }
 
-  // Get loans for a specific agent/user
+  // Get loans for a specific user/agent
   Future<AllLoans?> getUserLoans(int userId) async {
-    final response = await apiClient.getData('/dusers/$userId/loans');
-    if (response.statusCode == 200) {
-      AllLoans userLoans = AllLoans.fromJson(response.body);
-      return userLoans;
-    } else {
-      return null;
+    try {
+      final response = await apiClient.getData('/dusers/$userId/loans');
+      if (response.statusCode == 200) {
+        return AllLoans.fromJson(response.body);
+      }
+    } catch (e) {
+      print("Error fetching user loans: $e");
     }
+    return null;
   }
 
   // Pay loan
   Future<Response> payLoan(Map<String, dynamic> paymentData) async {
-    return await apiClient.postData('/dloans/pay', paymentData);
+    try {
+      return await apiClient.postData('/dloans/pay', paymentData);
+    } catch (e) {
+      print("Error processing loan payment: $e");
+      rethrow;
+    }
   }
 
   // Reverse payment
   Future<Response> reversePayment(int id) async {
-    return await apiClient.postData('/dloans/$id/reverse', {});
+    try {
+      return await apiClient.postData('/dloans/$id/reverse', {});
+    } catch (e) {
+      print("Error reversing payment: $e");
+      rethrow;
+    }
   }
 
   // Approve loan
   Future<Response> approveLoan(int id) async {
-    return await apiClient.postData('/dloans/$id/approve', {});
+    try {
+      return await apiClient.postData('/dloans/$id/approve', {});
+    } catch (e) {
+      print("Error approving loan: $e");
+      rethrow;
+    }
   }
 
- // Get loan plans
-Future<AllLoanPlans?> getLoanPlans() async {
-  final response = await apiClient.getData('/dloan-plans');
-  if (response.statusCode == 200) {
-    AllLoanPlans allLoanPlans = AllLoanPlans.fromJson(response.body);
-
-    // Optionally, cache the data for offline access
-    storage.write('loan_plans', response.body);
-
-    return allLoanPlans;
-  } else {
-    // Attempt to retrieve cached data
-    final cachedData = storage.read('loan_plans');
-    if (cachedData != null) {
-      return AllLoanPlans.fromJson(cachedData);
+  // Fetch all loan plans
+  Future<AllLoanPlans?> getLoanPlans10() async {
+    try {
+      final response = await apiClient.getData('/dloan-plans');
+      if (response.statusCode == 200) {
+        AllLoanPlans allLoanPlans = AllLoanPlans.fromJson(response.body);
+        storage.write('loan_plans', response.body); // Cache the data
+        return allLoanPlans;
+      } else {
+        // Attempt to retrieve cached data
+        final cachedData = storage.read('loan_plans');
+        if (cachedData != null) {
+          return AllLoanPlans.fromJson(cachedData);
+        }
+      }
+    } catch (e) {
+      print("Error fetching loan plans: $e");
     }
     return null;
   }
+
+  // Repository function for fetching loan plans
+Future<AllLoanPlans?> getLoanPlans() async {
+  try {
+    final response = await apiClient.getData('/d/loan-plans');
+    if (response.statusCode == 200) {
+      AllLoanPlans allLoanPlans = AllLoanPlans.fromJson(response.body);
+      storage.write('loan_plans', response.body); // Cache the data
+      return allLoanPlans;
+    } else {
+      // Attempt to retrieve cached data
+      final cachedData = storage.read('loan_plans');
+      if (cachedData != null) {
+        return AllLoanPlans.fromJson(cachedData);
+      }
+    }
+  } catch (e) {
+    print("Error fetching loan plans: $e");
+  }
+  return null;
 }
 
 
-  // Create loan plan
+  // Create a loan plan
   Future<Response> createLoanPlan(Map<String, dynamic> planData) async {
-    return await apiClient.postData('/dplans/create', planData);
+    try {
+      return await apiClient.postData('/dplans/create', planData);
+    } catch (e) {
+      print("Error creating loan plan: $e");
+      rethrow;
+    }
   }
 
   // Update loan plan
   Future<Response> updateLoanPlan(int id, Map<String, dynamic> updatedData) async {
-    return await apiClient.putData('/dplans/$id/update', updatedData);
+    try {
+      return await apiClient.putData('/dplans/$id/update', updatedData);
+    } catch (e) {
+      print("Error updating loan plan: $e");
+      rethrow;
+    }
   }
 
   // Delete loan plan
   Future<Response> deleteLoanPlan(int id) async {
-    return await apiClient.deleteData('/dplans/$id/destroy');
-  }
-
-  // Get today's loan installments
-  // Future<List<LoanInstallment>> getTodaysInstallments() async {
-  //   final response = await apiClient.getData('/dinstallments/today');
-  //   if (response.statusCode == 200) {
-  //     List<LoanInstallment> installments = (response.body['data'] as List)
-  //         .map((instJson) => LoanInstallment.fromJson(instJson))
-  //         .toList();
-  //     return installments;
-  //   } else {
-  //     return [];
-  //   }
-  // }
-
-  // Get total amount for agent on a specific date
-  Future<Map<String, dynamic>?> getTotalAmountForAgentOnDate(int agentId, {DateTime? date}) async {
-    final response = await apiClient.postData(
-      '/dagents/$agentId/total-amount',
-      {'date': date?.toIso8601String() ?? DateTime.now().toIso8601String()},
-    );
-    if (response.statusCode == 200) {
-      return response.body['data'];
-    } else {
-      return null;
+    try {
+      return await apiClient.deleteData('/dplans/$id/destroy');
+    } catch (e) {
+      print("Error deleting loan plan: $e");
+      rethrow;
     }
   }
 
-  // Get agent's clients with running loans
-  Future<List<ClientData>> getAgentsClientsWithRunningLoans(int agentId) async {
-    final response = await apiClient.getData('/dagents/$agentId/clients-running-loans');
-    if (response.statusCode == 200) {
-      List<ClientData> clients = (response.body['data'] as List)
-          .map((clientJson) => ClientData.fromJson(clientJson))
-          .toList();
-      return clients;
-    } else {
-      return [];
+  // Get client loan payment history
+  Future<ClientLoanspayHistory?> getClientLoanPaymentHistory(int clientId) async {
+    try {
+      final response = await apiClient.getData('/d/dclients/$clientId/loan-history');
+      if (response.statusCode == 200) {
+        return ClientLoanspayHistory.fromJson(response.body);
+      }
+    } catch (e) {
+      print("Error fetching loan payment history: $e");
     }
-  }
-
-  // Get agent's clients with pending loans
-  Future<List<ClientData>> getAgentsClientsWithPendingLoans(int agentId) async {
-    final response = await apiClient.getData('/dagents/$agentId/clients-pending-loans');
-    if (response.statusCode == 200) {
-      List<ClientData> clients = (response.body['data'] as List)
-          .map((clientJson) => ClientData.fromJson(clientJson))
-          .toList();
-      return clients;
-    } else {
-      return [];
-    }
-  }
-
-  // Get agent's clients with paid loans
-  Future<List<ClientData>> getAgentsClientsWithPaidLoans(int agentId) async {
-    final response = await apiClient.getData('/dagents/$agentId/clients-paid-loans');
-    if (response.statusCode == 200) {
-      List<ClientData> clients = (response.body['data'] as List)
-          .map((clientJson) => ClientData.fromJson(clientJson))
-          .toList();
-      return clients;
-    } else {
-      return [];
-    }
-  }
-
-  // Get today's schedule for an agent
-  // Future<List<LoanInstallment>> getTodaysSchedule(int agentId) async {
-  //   final response = await apiClient.getData('/dagents/$agentId/schedule/today');
-  //   if (response.statusCode == 200) {
-  //     List<LoanInstallment> schedule = (response.body['data'] as List)
-  //         .map((instJson) => LoanInstallment.fromJson(instJson))
-  //         .toList();
-  //     return schedule;
-  //   } else {
-  //     return [];
-  //   }
-  // }
-
-  // Update loan payment
-  Future<Response> updateLoanPayment(int loanId, Map<String, dynamic> paymentData) async {
-    return await apiClient.putData('/dloans/$loanId/update-payment', paymentData);
-  }
-
-  // Store client loan
-  Future<Response> storeClientLoan(Map<String, dynamic> loanData) async {
-    return await apiClient.postData('/dclients/loan/store', loanData);
-  }
-// Get client loan payment history
-Future<ClientLoanspayHistory?> getClientLoanPaymentHistory(int clientId) async {
-  final response = await apiClient.getData('/d/dclients/$clientId/loan-history');
-  if (response.statusCode == 200) {
-    ClientLoanspayHistory paymentHistory = ClientLoanspayHistory.fromJson(response.body);
-    return paymentHistory;
-  } else {
     return null;
   }
-}
 
-
-  // Get client QR code
-  Future<String?> getClientQr(int clientId) async {
-    final response = await apiClient.getData('/dclients/$clientId/qr');
-    if (response.statusCode == 200) {
-      return response.body['qr_code'];
-    } else {
-      return null;
+  // Get total amount for an agent on a specific date
+  Future<Map<String, dynamic>?> getTotalAmountForAgentOnDate(int agentId, {DateTime? date}) async {
+    try {
+      final response = await apiClient.postData(
+        '/dagents/$agentId/total-amount',
+        {'date': date?.toIso8601String() ?? DateTime.now().toIso8601String()},
+      );
+      if (response.statusCode == 200) {
+        return response.body['data'];
+      }
+    } catch (e) {
+      print("Error fetching agent's total amount: $e");
     }
+    return null;
   }
-
-  // Additional methods can be added here following the same pattern
 }

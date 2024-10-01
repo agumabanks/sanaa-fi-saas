@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sanaa_fi_saas/features/Loans/controllers/LoanController.dart';
+import 'package:sanaa_fi_saas/features/home/views/date_app_bar.dart';
 // import 'package:sanaa_fi_saas/features/Loans/controllers/LoanController.dart'; // Import your LoanController
 
 class LoansPage extends StatelessWidget {
@@ -26,51 +27,68 @@ class LoanDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Loans Dashboard On 29 Sep 2024'),
-        backgroundColor: Colors.blueAccent,
+      backgroundColor: Colors.white,
+      appBar: DateAppBar(
+        title: 'Loans Dashboard',
+        centerTitle: true, // Optional: centers the title
+         
       ),
       body: Row(
         children: [
           // Sidebar
           Expanded(
             flex: 2,
-            child: Container(
-              color: const Color.fromARGB(188, 237, 237, 237), // Light grey background
-              child: ListView(
-                padding: const EdgeInsets.all(8.0),
-                children: [
-                  _buildSidebarItem(
-                    title: 'Home',
-                    selectedIndex: 0,
-                    controller: loanController,
-                  ),
-                  _buildSidebarItem(
-                    title: 'All Loans',
-                    selectedIndex: 1,
-                    controller: loanController,
-                  ),
-                  _buildSidebarItem(
-                    title: 'Pending Loans',
-                    selectedIndex: 2,
-                    controller: loanController,
-                  ),
-                  _buildSidebarItem(
-                    title: 'Rejected Loans',
-                    selectedIndex: 3,
-                    controller: loanController,
-                  ),
-                  _buildSidebarItem(
-                    title: 'Running Loans',
-                    selectedIndex: 4,
-                    controller: loanController,
-                  ),
-                  _buildSidebarItem(
-                    title: 'Loan Plans',
-                    selectedIndex: 5,
-                    controller: loanController,
-                  ),
-                ],
+            child: Padding(
+              padding: const EdgeInsets.only(top: 16, right: 8),
+              child: Container(
+                decoration: BoxDecoration(
+                   
+                  borderRadius: BorderRadius.circular(8),
+                  color: const Color.fromARGB(188, 237, 237, 237), 
+                ),
+                // Light grey background
+                child: ListView(
+                  padding: const EdgeInsets.all(8.0),
+                  children: [
+                    _buildSidebarItem(
+                      title: 'Home',
+                      selectedIndex: 0,
+                      controller: loanController,
+                    ),
+                    _buildSidebarItem(
+                      title: 'All Loans',
+                      selectedIndex: 1,
+                      controller: loanController,
+                    ),
+                    _buildSidebarItem(
+                      title: 'Pending Loans',
+                      selectedIndex: 2,
+                      controller: loanController,
+                    ),
+                     _buildSidebarItem(
+                      title: 'Running Loans',
+                      selectedIndex: 3,
+                      controller: loanController,
+                    ),
+                    _buildSidebarItem(
+                      title: 'Rejected Loans',
+                      selectedIndex: 4,
+                      controller: loanController,
+                    ),
+              
+                    _buildSidebarItem(
+                      title: 'Paid Loans',
+                      selectedIndex: 5,
+                      controller: loanController,
+                    ),
+                   
+                    _buildSidebarItem(
+                      title: 'Loan Plans',
+                      selectedIndex: 6,
+                      controller: loanController,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

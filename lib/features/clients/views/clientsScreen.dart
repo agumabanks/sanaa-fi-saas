@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sanaa_fi_saas/features/clients/controller/ClientController.dart';
+import 'package:sanaa_fi_saas/features/clients/controller/client_profile_controller.dart';
 import 'package:sanaa_fi_saas/features/clients/data/client.dart';
 import 'package:sanaa_fi_saas/features/clients/views/client_profile_screen.dart';
+import 'package:sanaa_fi_saas/features/home/controllers/ContentController.dart';
 
 class ClientsPage extends StatelessWidget {
   final ClientController clientController = Get.find<ClientController>();
@@ -71,10 +73,32 @@ class ClientsPage extends StatelessWidget {
                     // View Action Button
                     IconButton(
                       icon: const Icon(Icons.visibility),
-                      onPressed: () {
+                      onPressed: () async {
                         if (client?.id != null) {
-                          Get.to(() => ClientProfileScreen(clientId: client!.id!));
+                        
+                        final clientProfileController = Get.find<ClientProfileController>();
+
+                        if (clientProfileController.clientId.value == client!.id! &&
+                              clientProfileController.clientProfile.value != null) {
+              
+                            Get.find<ContentController>().changePage(9);
+                            Get.find<ContentController>().currentPage.value == 3; 
+                            // Get.find<ClientProfileController>().fetchClientProfile(client!.id!);
+                          } else {
+                            // Fetch the profile first
+                            await clientProfileController.fetchClientProfile(client!.id!);
+                            // Then navigate to the profile screen
+                            // Get.to(() => ClientProfileScreen());
+                            // Get.find<ClientProfileController>().fetchClientProfile(client!.id!);
+                            Get.find<ContentController>().changePage(9);
+                            Get.find<ContentController>().currentPage.value == 3; 
+                          }
                         }
+
+
+                          // Get.to(() => ClientProfileScreen(clientId: client!.id!));
+                          
+                        // }
                       },
                       tooltip: 'View Profile',
                     ),
