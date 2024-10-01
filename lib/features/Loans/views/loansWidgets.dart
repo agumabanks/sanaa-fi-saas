@@ -19,19 +19,6 @@ class PendingLoansPage2 extends StatelessWidget {
   }
 }
 
-class RunningLoansPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('ran Loans'),
-      ),
-      body: Center(
-        child: Text('Display rannnn Loans Here'),
-      ),
-    );
-  }
-}
 
 
 
@@ -142,57 +129,67 @@ class LoansHome extends StatelessWidget {
       body: Expanded(
             flex: 8,
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Metrics Section
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              padding: const EdgeInsets.only(top: 16, bottom:0),
+              child: Container(
+
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: const Color.fromARGB(188, 237, 237, 237), 
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      DashboardMetric(
-                        title: 'New Clients',
-                        value: '123',
+                      // Metrics Section
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          DashboardMetric(
+                            title: 'New Clients',
+                            value: '123',
+                          ),
+                          DashboardMetric(
+                            title: 'Total Loans',
+                            value: '456',
+                          ),
+                          DashboardMetric(
+                            title: 'Total Payments',
+                            value: '\$89,000',
+                          ),
+                          DashboardMetric(
+                            title: 'Total Profit',
+                            value: '\$12,500',
+                          ),
+                        ],
                       ),
-                      DashboardMetric(
-                        title: 'Total Loans',
-                        value: '456',
+                      SizedBox(height: 20),
+                      // Recent Transactions
+                      Text(
+                        'Recent Transactions',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       ),
-                      DashboardMetric(
-                        title: 'Total Payments',
-                        value: '\$89,000',
-                      ),
-                      DashboardMetric(
-                        title: 'Total Profit',
-                        value: '\$12,500',
+                      SizedBox(height: 10),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                          ),
+                          child: ListView.builder(
+                            itemCount: 10, // Number of transactions
+                            itemBuilder: (context, index) {
+                              return ListTile(
+                                title: Text('Transaction #${index + 1}'),
+                                subtitle: Text('Date: 2024-09-29'),
+                                trailing: Text('\$100'),
+                              );
+                            },
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
-                  // Recent Transactions
-                  Text(
-                    'Recent Transactions',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 10),
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                      ),
-                      child: ListView.builder(
-                        itemCount: 10, // Number of transactions
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            title: Text('Transaction #${index + 1}'),
-                            subtitle: Text('Date: 2024-09-29'),
-                            trailing: Text('\$100'),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ),

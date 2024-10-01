@@ -6,6 +6,7 @@ import 'package:sanaa_fi_saas/features/Loans/data/loansRepo.dart';
 import 'package:sanaa_fi_saas/features/Loans/views/allLoans.dart';
 import 'package:sanaa_fi_saas/features/Loans/views/loansWidgets.dart';
 import 'package:sanaa_fi_saas/features/Loans/views/pendingLoanss.dart';
+import 'package:sanaa_fi_saas/features/Loans/views/runningLoans.dart';
 import 'package:sanaa_fi_saas/features/Loans/views/viewLoan.dart';
 
 class LoanController extends GetxController {

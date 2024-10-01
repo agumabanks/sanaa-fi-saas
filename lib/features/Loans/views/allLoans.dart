@@ -118,65 +118,74 @@ class AllLoansPage extends StatelessWidget {
       
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: <Widget>[
-            // Search Bar
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: searchController,
-                    decoration: const InputDecoration(
-                      labelText: 'Search by Agent Name',
-                      border: OutlineInputBorder(),
+        child: Container(
+          decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: const Color.fromARGB(188, 237, 237, 237), 
+                ),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: <Widget>[
+                // Search Bar
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: searchController,
+                        decoration: const InputDecoration(
+                          labelText: 'Search by Agent Name',
+                          border: OutlineInputBorder(),
+                        ),
+                        onSubmitted: (value) {
+                          loanController.searchLoans(value);
+                        },
+                      ),
                     ),
-                    onSubmitted: (value) {
-                      loanController.searchLoans(value);
-                    },
-                  ),
+                    const SizedBox(width: 10),
+                    ElevatedButton(
+                      onPressed: () {
+                        loanController.searchLoans(searchController.text);
+                      },
+                      child: const Text('Search'),
+                    ),
+                    const SizedBox(width: 10),
+                    ElevatedButton(
+                      onPressed: () {
+                        searchController.clear();
+                        loanController.clearSearch();
+                      },
+                      child: const Text('Clear'),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    loanController.searchLoans(searchController.text);
-                  },
-                  child: const Text('Search'),
+                const SizedBox(height: 20),
+                // Loan List or Loading Indicator
+                Expanded(
+                  child: Obx(() {
+                    if (loanController.isLoading.value && loanController.loans.isEmpty) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (loanController.loans.isEmpty) {
+                      return const Center(child: Text('No loans found.'));
+                    } else {
+                      return buildLoanList();
+                    }
+                  }),
                 ),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    searchController.clear();
-                    loanController.clearSearch();
-                  },
-                  child: const Text('Clear'),
-                ),
+                // Pagination Loading Indicator
+                Obx(() {
+                  if (loanController.isLoading.value && loanController.loans.isNotEmpty) {
+                    return const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                }),
               ],
             ),
-            const SizedBox(height: 20),
-            // Loan List or Loading Indicator
-            Expanded(
-              child: Obx(() {
-                if (loanController.isLoading.value && loanController.loans.isEmpty) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (loanController.loans.isEmpty) {
-                  return const Center(child: Text('No loans found.'));
-                } else {
-                  return buildLoanList();
-                }
-              }),
-            ),
-            // Pagination Loading Indicator
-            Obx(() {
-              if (loanController.isLoading.value && loanController.loans.isNotEmpty) {
-                return const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: CircularProgressIndicator(),
-                );
-              } else {
-                return const SizedBox.shrink();
-              }
-            }),
-          ],
+          ),
         ),
       ),
     );

@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:sanaa_fi_saas/features/Loans/controllers/LoanController.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/AllLoanPlans.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/PendingLoansModal.dart';
+import 'package:sanaa_fi_saas/features/Loans/data/RunningLoansModal.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/allLoansModal.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/viewLoanModal.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/loansRepo.dart';
@@ -14,6 +15,7 @@ class AllLoansController extends GetxController {
   // Observables for managing loan data and state
   var loans = <AllLoansDatum>[].obs; // Holds all loans data
   var pendingLoans = <PendingLoansModalDatum>[].obs; // Holds pending loans data
+  var runningLoans = <RunningLoansModalDatum>[].obs; // Holds pending loans data
   var loanPlans = Rxn<List<Datum>>(); // Holds loan plans data
 
   var isLoading = false.obs; // Loading state
@@ -31,10 +33,41 @@ class AllLoansController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchAllLoans(); // Fetch all loans on initialization
-    fetchLoanPlans(); // Fetch loan plans
-    fetchPendingLoans(); // Fetch pending loans
+    fetchAllLoans();  
+    fetchLoanPlans();  
+    fetchPendingLoans();  
+    fetchRunningLoans();  
   }
+
+  // Fetch pending loans with pagination and search
+  Future<void> fetchRunningLoans({int page = 1}) async {
+    try {
+      isLoading(true); // Start loading indicator
+      isError(false); // Reset error state
+
+      RunningLoansModal? runningLoansData =
+          await loanRepo.getRunniningLoans(page: page, search: searchQuery.value);
+
+      if (runningLoansData != null && runningLoansData.data != null) {
+        final fetchedLoans = runningLoansData.data;
+        if (fetchedLoans!.isNotEmpty) {
+          if (page == 1) runningLoans.clear(); // Clear current pending loans if first page
+          runningLoans.addAll(fetchedLoans); // Add fetched pending loans to the list
+
+          // Update pagination data
+          currentPage.value = runningLoansData.pagination?.currentPage ?? 1;
+          totalPages.value = runningLoansData.pagination?.lastPage ?? 1;
+        }
+      } else {
+        print("No Running loans found.");
+      }
+    } catch (e) {
+      print("Error fetching Running loans: $e");
+    } finally {
+      isLoading(false); // Stop loading indicator
+    }
+  }
+
 
   // Fetch loan plans
   Future<void> fetchLoanPlans() async {

@@ -3,13 +3,12 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sanaa_fi_saas/features/Loans/controllers/allLoansControllers.dart';
  
-class PendingLoansPage extends StatelessWidget {
+class RunningLoansPage extends StatelessWidget {
   final AllLoansController loanController = Get.put(AllLoansController(loanRepo: Get.find())); // Inject the controller
   final TextEditingController searchController = TextEditingController();
   final ScrollController scrollController = ScrollController();
 
-  PendingLoansPage({Key? key}) : super(key: key) {
-    // Infinite scroll listener to load more loans when reaching the bottom
+  RunningLoansPage({Key? key}) : super(key: key) {
     scrollController.addListener(() {
       if (scrollController.position.pixels == scrollController.position.maxScrollExtent &&
           !loanController.isLoading.value &&
@@ -23,9 +22,9 @@ class PendingLoansPage extends StatelessWidget {
   Widget buildLoanList() {
     return ListView.builder(
       controller: scrollController,
-      itemCount: loanController.pendingLoans.length,
+      itemCount: loanController.loans.length,
       itemBuilder: (context, index) {
-        final loan = loanController.pendingLoans[index];
+        final loan = loanController.loans[index];
         return Card(
           margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
           child: Padding(

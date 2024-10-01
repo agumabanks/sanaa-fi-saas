@@ -5,6 +5,8 @@ import 'package:sanaa_fi_saas/features/Loans/data/AllLoanPlans.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/ClientLoanDetails.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/ClientLoanspayHistory.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/PendingLoansModal.dart';
+import 'package:sanaa_fi_saas/features/Loans/data/RejectedLoansModal.dart';
+import 'package:sanaa_fi_saas/features/Loans/data/RunningLoansModal.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/allLoansModal.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/loanModal.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/viewLoanModal.dart';
@@ -73,6 +75,68 @@ Future<PendingLoansModal?> getPendingLoans({String? search, int page = 1}) async
   }
   return null;
 }
+
+
+
+// Fetch all Rejected loans with optional search query
+Future<RejectedLoansModal?> getRejectedLoans({String? search, int page = 1}) async {
+  try {
+    final response = await apiClient.getData(
+      '/d/loans/rejected',
+      query: {
+        if (search != null && search.isNotEmpty) 'search': search,
+        'page': page.toString(),
+      },
+    );
+
+    if (response.statusCode == 200) {
+      // Corrected variable name from 'AllLoAllLoansModalans' to 'AllLoansModal'
+      RejectedLoansModal allLoans = RejectedLoansModal.fromJson(response.body);
+      storage.write('loans_page_$page', response.body); // Cache data
+      return allLoans;
+    } else {
+      // Fallback to cache if API fails
+      final cachedData = storage.read('loans_page_$page');
+      if (cachedData != null) {
+        return RejectedLoansModal.fromJson(cachedData);
+      }
+    }
+  } catch (e) {
+    print("Error fetching loans: $e");
+  }
+  return null;
+}
+
+
+// Fetch all Pending loans with optional search query
+Future<RunningLoansModal?> getRunniningLoans({String? search, int page = 1}) async {
+  try {
+    final response = await apiClient.getData(
+      '/d/loans/running',
+      query: {
+        if (search != null && search.isNotEmpty) 'search': search,
+        'page': page.toString(),
+      },
+    );
+
+    if (response.statusCode == 200) {
+      // Corrected variable name from 'AllLoAllLoansModalans' to 'AllLoansModal'
+      RunningLoansModal allLoans = RunningLoansModal.fromJson(response.body);
+      storage.write('loans_page_$page', response.body); // Cache data
+      return allLoans;
+    } else {
+      // Fallback to cache if API fails
+      final cachedData = storage.read('loans_page_$page');
+      if (cachedData != null) {
+        return RunningLoansModal.fromJson(cachedData);
+      }
+    }
+  } catch (e) {
+    print("Error fetching loans: $e");
+  }
+  return null;
+}
+
 
 
   // Get loan details by ID
