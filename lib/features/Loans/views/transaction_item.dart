@@ -22,9 +22,9 @@ class TransactionItem extends StatelessWidget {
         : 'Unknown Agent';
 
     return ListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 8),
+      contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       leading: CircleAvatar(
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Color(0xFF003E47),
         child: Icon(Icons.payment, color: Colors.white),
       ),
       title: Text(

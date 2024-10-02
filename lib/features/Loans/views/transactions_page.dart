@@ -18,6 +18,7 @@ class TransactionsPage extends StatelessWidget {
           'Transaction History',
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
+        centerTitle: false,
         backgroundColor: Colors.white,
         elevation: 1,
         iconTheme: IconThemeData(color: Colors.black),
@@ -48,23 +49,29 @@ class TransactionsPage extends StatelessWidget {
               }
               return false;
             },
-            child: ListView.separated(
-              padding: EdgeInsets.all(16),
-              itemCount: controller.transactions.length + 1,
-              separatorBuilder: (context, index) => Divider(height: 1, color: Colors.grey[300]),
-              itemBuilder: (context, index) {
-                if (index < controller.transactions.length) {
-                  final transaction = controller.transactions[index];
-                  return TransactionItem(transaction: transaction);
-                } else {
-                  return controller.isLoading.value
-                      ? Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Center(child: CircularProgressIndicator()),
-                        )
-                      : SizedBox.shrink();
-                }
-              },
+            child: Container(
+               decoration: BoxDecoration(
+                            // border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(18)
+                          ),
+              child: ListView.separated(
+                padding: EdgeInsets.all(16),
+                itemCount: controller.transactions.length + 1,
+                separatorBuilder: (context, index) => Divider(height: 1, color: Colors.grey[300]),
+                itemBuilder: (context, index) {
+                  if (index < controller.transactions.length) {
+                    final transaction = controller.transactions[index];
+                    return TransactionItem(transaction: transaction);
+                  } else {
+                    return controller.isLoading.value
+                        ? Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(child: CircularProgressIndicator()),
+                          )
+                        : SizedBox.shrink();
+                  }
+                },
+              ),
             ),
           );
         }

@@ -23,7 +23,7 @@ class LoanDashboard extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Loans Dashboard'),
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Color(0xFF003E47),
       ),
       body: Row(
         children: [

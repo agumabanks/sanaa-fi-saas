@@ -18,11 +18,11 @@ class SidebarItem extends StatelessWidget {
             )
           : null,
       child: ListTile(
-        leading: Icon(icon, color: isSelected ? Colors.blue : Colors.black87),
+        leading: Icon(icon, color: isSelected ? Color(0xFF003E47) : Colors.black87),
         title: Text(
           title,
           style: TextStyle(
-            color: isSelected ? Colors.blue : Colors.black87,
+            color: isSelected ? Color(0xFF003E47): Colors.black87,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
         ),

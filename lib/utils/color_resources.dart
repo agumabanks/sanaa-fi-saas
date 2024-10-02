@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+  // static  Color getPrimaryColor() 
 
 class ColorResources {
   static  Color getPrimaryColor() {

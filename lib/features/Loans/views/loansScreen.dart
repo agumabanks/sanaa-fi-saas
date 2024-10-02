@@ -111,12 +111,18 @@ class LoanDashboard extends StatelessWidget {
     return Obx(() {
       bool isSelected = controller.currentPage.value == selectedIndex;
       return Container(
-        color: isSelected ? Colors.blueAccent.withOpacity(0.1) : Colors.transparent, // Highlight selected page
+        decoration: isSelected
+          ? BoxDecoration(
+              color: const Color(0xFFDADADA).withOpacity(0.5), // Highlighted background for selected
+              borderRadius: BorderRadius.circular(8),
+            )
+          : null,
+        // color: isSelected ? const Color(0xFFDADADA).withOpacity(0.5) : Colors.transparent, // Highlight selected page
         child: ListTile(
           title: Text(
             title,
             style: TextStyle(
-              color: isSelected ? Colors.blueAccent : Colors.black87,
+              color: isSelected ? Color(0xFF003E47) : Colors.black87,
               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
             ),
           ),

@@ -149,17 +149,23 @@ class LoansHome extends StatelessWidget {
 
                       const SizedBox(height: 20),
                       // Recent Transactions
-                      const Text(
-                        'Recent Transactions',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
+                      // const Text(
+                      //   'Recent Transactions',
+                      //   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      // ),
                       const SizedBox(height: 10),
                       Expanded(
                         child: Container(
                           decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
+    border: Border.all(color: Colors.grey, ), // Set border color and width
+                            borderRadius: BorderRadius.circular(18),
                           ),
-                          child: TransactionsPage(),
+                            clipBehavior: Clip.antiAlias, // Ensures child content respects the rounded corners
+
+                          child: ClipRRect(
+                                borderRadius: BorderRadius.circular(18), // Apply the same rounding to child content
+
+                            child: TransactionsPage()),
                         ),
                       ),
                     ],

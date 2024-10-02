@@ -10,7 +10,7 @@ class ViewLoan extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Loan Details'),
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Color(0xFF003E47),
       ),
       body: Obx(() {
         if (loanController.isLoading.value) {
