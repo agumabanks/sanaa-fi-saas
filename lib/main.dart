@@ -4,6 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:sanaa_fi_saas/data/api/api_client.dart';
 import 'package:sanaa_fi_saas/features/Loans/controllers/LoanController.dart';
 import 'package:sanaa_fi_saas/features/Loans/controllers/allLoansControllers.dart';
+import 'package:sanaa_fi_saas/features/Loans/controllers/loans_dashboard_controller.dart';
 import 'package:sanaa_fi_saas/features/Loans/controllers/transaction_history_controller.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/loansRepo.dart';
 import 'package:sanaa_fi_saas/features/clients/controller/ClientController.dart';
@@ -55,6 +56,10 @@ Future<void> main() async {
   Get.lazyPut(()=>ClientProfileController(clientRepo: Get.find()));
   Get.lazyPut<ClientController>(() => ClientController(clientRepo: Get.find<ClientRepo>()));
   Get.put<TransactionHistoryController>(TransactionHistoryController(loanRepo: Get.find()));
+
+  // DashboardController
+  Get.put<DashboardController>(DashboardController(loanRepo: Get.find()));
+
 
 
   // AllLoansController

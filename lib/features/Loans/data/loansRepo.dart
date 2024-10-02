@@ -4,6 +4,7 @@ import 'package:sanaa_fi_saas/data/api/api_client.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/AllLoanPlans.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/ClientLoanDetails.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/ClientLoanspayHistory.dart';
+import 'package:sanaa_fi_saas/features/Loans/data/LoansDash.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/PaidLoansModal.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/PendingLoansModal.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/RejectedLoansModal.dart';
@@ -18,6 +19,30 @@ class LoanRepo {
   final GetStorage storage = GetStorage();
 
   LoanRepo({required this.apiClient});
+
+
+   /// Fetch loan dashboard statistics
+  Future<DashboardStats?> getLoanDashboardStats() async {
+    try {
+      final response = await apiClient.getData('/d/dashboard/loan-stats'); // Adjust the endpoint as needed
+      if (response.statusCode == 200) {
+        final data = response.body['data'];
+        DashboardStats stats = DashboardStats.fromJson(data);
+        storage.write('loan_dashboard_stats', response.body); // Cache the data
+        return stats;
+      } else {
+        // Attempt to retrieve cached data if API call fails
+        final cachedData = storage.read('loan_dashboard_stats');
+        if (cachedData != null) {
+          DashboardStats stats = DashboardStats.fromJson(cachedData['data']);
+          return stats;
+        }
+      }
+    } catch (e) {
+      print("Error fetching loan dashboard stats: $e");
+    }
+    return null;
+  }
 
 // **1. Fetch Latest Payment Transactions with pagination and optional search**
   Future<LatestPaymentTransactions?> getLatestPaymentTransactions({String? search, int page = 1, int perPage = 20}) async {
