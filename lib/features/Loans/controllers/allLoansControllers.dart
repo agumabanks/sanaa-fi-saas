@@ -1,7 +1,9 @@
 import 'package:get/get.dart';
 import 'package:sanaa_fi_saas/features/Loans/controllers/LoanController.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/AllLoanPlans.dart';
+import 'package:sanaa_fi_saas/features/Loans/data/PaidLoansModal.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/PendingLoansModal.dart';
+import 'package:sanaa_fi_saas/features/Loans/data/RejectedLoansModal.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/RunningLoansModal.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/allLoansModal.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/viewLoanModal.dart';
@@ -16,7 +18,10 @@ class AllLoansController extends GetxController {
   var loans = <AllLoansDatum>[].obs; // Holds all loans data
   var pendingLoans = <PendingLoansModalDatum>[].obs; // Holds pending loans data
   var runningLoans = <RunningLoansModalDatum>[].obs; // Holds pending loans data
-  var loanPlans = Rxn<List<Datum>>(); // Holds loan plans data
+  var rejectedLoans = <RejectedLoansModalDatum>[].obs; // Holds pending loans data  PaidLoansModal
+  var paidLoans = <PaidLoansModalDatum>[].obs; // Holds pending loans data  PaidLoansModal
+
+  var loanPlans = Rxn<List<Datum>>(); // Holds loan plans data RejectedLoansModal
 
   var isLoading = false.obs; // Loading state
   var isError = false.obs; // Error state
@@ -24,7 +29,9 @@ class AllLoansController extends GetxController {
 
   // Pagination and search query observables
   var searchQuery = ''.obs;
-  var currentPage = 1.obs; // Tracks the current page number
+  var currentPage = 1.obs; 
+  var currentRejectedPage = 1.obs;
+  var currentPaidPage = 1.obs;
   var totalPages = 1.obs; // Tracks the total number of pages
 
   // Observable for viewing a single loan
@@ -36,10 +43,72 @@ class AllLoansController extends GetxController {
     fetchAllLoans();  
     fetchLoanPlans();  
     fetchPendingLoans();  
-    fetchRunningLoans();  
+    fetchRunningLoans();
+    fetchRejectedLoans();
+    fetchPaidLoans();  
   }
 
-  // Fetch pending loans with pagination and search
+// Fetch     fetchRejectedLoans();  loans with pagination and search
+  Future<void> fetchRejectedLoans({int page = 1}) async {
+    try {
+      isLoading(true); // Start loading indicator
+      isError(false); // Reset error state
+
+      RejectedLoansModal? runningLoansData =
+          await loanRepo.getRejectedLoans(page: page, search: searchQuery.value);
+
+      if (runningLoansData != null && runningLoansData.data != null) {
+        final fetchedLoans = runningLoansData.data;
+        if (fetchedLoans!.isNotEmpty) {
+          if (page == 1) rejectedLoans.clear(); // Clear current pending loans if first page
+          rejectedLoans.addAll(fetchedLoans); // Add fetched pending loans to the list
+
+          // Update pagination data
+          currentPage.value = runningLoansData.pagination?.currentPage ?? 1;
+          totalPages.value = runningLoansData.pagination?.lastPage ?? 1;
+        }
+      } else {
+        print("No Running loans found.");
+      }
+    } catch (e) {
+      print("Error fetching Running loans: $e");
+    } finally {
+      isLoading(false); // Stop loading indicator
+    }
+  }
+
+// Fetch     fetchPaidLoans();  loans with pagination and search
+  Future<void> fetchPaidLoans({int page = 1}) async {
+    try {
+      isLoading(true); // Start loading indicator
+      isError(false); // Reset error state
+
+      PaidLoansModal? runningLoansData =
+          await loanRepo.getPaidLoans(page: page, search: searchQuery.value);
+
+      if (runningLoansData != null && runningLoansData.data != null) {
+        final fetchedLoans = runningLoansData.data;
+        if (fetchedLoans!.isNotEmpty) {
+          if (page == 1) paidLoans.clear(); // Clear current pending loans if first page
+          paidLoans.addAll(fetchedLoans); // Add fetched pending loans to the list
+
+          // Update pagination data
+          currentPaidPage.value = runningLoansData.pagination?.currentPage ?? 1;
+          totalPages.value = runningLoansData.pagination?.lastPage ?? 1;
+        }
+      } else {
+        print("No Running loans found.");
+      }
+    } catch (e) {
+      print("Error fetching Running loans: $e");
+    } finally {
+      isLoading(false); // Stop loading indicator
+    }
+  }
+
+
+
+  // Fetch running loans with pagination and search
   Future<void> fetchRunningLoans({int page = 1}) async {
     try {
       isLoading(true); // Start loading indicator

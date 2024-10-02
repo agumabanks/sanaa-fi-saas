@@ -4,10 +4,12 @@ import 'package:sanaa_fi_saas/data/api/api_client.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/AllLoanPlans.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/ClientLoanDetails.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/ClientLoanspayHistory.dart';
+import 'package:sanaa_fi_saas/features/Loans/data/PaidLoansModal.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/PendingLoansModal.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/RejectedLoansModal.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/RunningLoansModal.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/allLoansModal.dart';
+import 'package:sanaa_fi_saas/features/Loans/data/latestPaymentTransactions.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/loanModal.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/viewLoanModal.dart';
 
@@ -16,6 +18,35 @@ class LoanRepo {
   final GetStorage storage = GetStorage();
 
   LoanRepo({required this.apiClient});
+
+// **1. Fetch Latest Payment Transactions with pagination and optional search**
+  Future<LatestPaymentTransactions?> getLatestPaymentTransactions({String? search, int page = 1, int perPage = 20}) async {
+    try {
+      final response = await apiClient.getData(
+        '/d/latest-payment-transactions',
+        query: {
+          if (search != null && search.isNotEmpty) 'search': search,
+          'page': page.toString(),
+          'per_page': perPage.toString(),
+        },
+      );
+
+      if (response.statusCode == 200) {
+        LatestPaymentTransactions transactions = LatestPaymentTransactions.fromJson(response.body);
+        storage.write('transactions_page_${page}_search_${search ?? 'none'}', response.body); // Cache data with search parameter
+        return transactions;
+      } else {
+        // Fallback to cache if API fails
+        final cachedData = storage.read('transactions_page_${page}_search_${search ?? 'none'}');
+        if (cachedData != null) {
+          return LatestPaymentTransactions.fromJson(cachedData);
+        }
+      }
+    } catch (e) {
+      print("Error fetching latest payment transactions: $e");
+    }
+    return null;
+  }
 
   // Fetch all loans with optional search query
 Future<AllLoansModal?> getAllLoans({String? search, int page = 1}) async {
@@ -76,6 +107,34 @@ Future<PendingLoansModal?> getPendingLoans({String? search, int page = 1}) async
   return null;
 }
 
+// Fetch all Paid loans with optional search query
+Future<PaidLoansModal?> getPaidLoans({String? search, int page = 1}) async {
+  try {
+    final response = await apiClient.getData(
+      '/d/loans/rejected',
+      query: {
+        if (search != null && search.isNotEmpty) 'search': search,
+        'page': page.toString(),
+      },
+    );
+
+    if (response.statusCode == 200) {
+      // Corrected variable name from 'AllLoAllLoansModalans' to 'AllLoansModal'
+      PaidLoansModal allLoans = PaidLoansModal.fromJson(response.body);
+      storage.write('loans_page_$page', response.body); // Cache data
+      return allLoans;
+    } else {
+      // Fallback to cache if API fails
+      final cachedData = storage.read('loans_page_$page');
+      if (cachedData != null) {
+        return PaidLoansModal.fromJson(cachedData);
+      }
+    }
+  } catch (e) {
+    print("Error fetching loans: $e");
+  }
+  return null;
+}
 
 
 // Fetch all Rejected loans with optional search query

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sanaa_fi_saas/features/Loans/controllers/allLoansControllers.dart';
+import 'package:sanaa_fi_saas/features/Loans/views/transactions_page.dart';
  
 
 class PendingLoansPage2 extends StatelessWidget {
@@ -10,9 +11,9 @@ class PendingLoansPage2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pending Loans'),
+        title: const Text('Pending Loans'),
       ),
-      body: Center(
+      body: const Center(
         child: Text('Display Pending Loans Here'),
       ),
     );
@@ -23,44 +24,17 @@ class PendingLoansPage2 extends StatelessWidget {
 
 
 
-class RejectedLoansPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('RejectedLoansPage Loans'),
-      ),
-      body: Center(
-        child: Text('Display RejectedLoansPage Loans Here'),
-      ),
-    );
-  }
-}
 
 
-
-class PaidLoansPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('RejectedLoansPage Loans'),
-      ),
-      body: Center(
-        child: Text('paid Loans Here'),
-      ),
-    );
-  }
-}
 
 class  LoansPlansPage2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('RejectedLoansPage Loans'),
+        title: const Text('RejectedLoansPage Loans'),
       ),
-      body: Center(
+      body: const Center(
         child: Text('Plans Loans Here'),
       ),
     );
@@ -75,17 +49,17 @@ class LoansPlansPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Loan Plans'),
+        title: const Text('Loan Plans'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Obx(() {
           if (loanPlanController.isLoading.value) {
-            return Center(child: CircularProgressIndicator()); // Show loading indicator
+            return const Center(child: CircularProgressIndicator()); // Show loading indicator
           } else if (loanPlanController.isError.value) {
             return Center(child: Text(loanPlanController.errorMessage.value)); // Show error message
           } else if (loanPlanController.loanPlans.value == null || loanPlanController.loanPlans.value!.isEmpty) {
-            return Center(child: Text('No loan plans available.')); // No data message
+            return const Center(child: Text('No loan plans available.')); // No data message
           } else {
             // Display the loan plans
             return ListView.builder(
@@ -142,49 +116,50 @@ class LoansHome extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Metrics Section
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          DashboardMetric(
-                            title: 'New Clients',
-                            value: '123',
-                          ),
-                          DashboardMetric(
-                            title: 'Total Loans',
-                            value: '456',
-                          ),
-                          DashboardMetric(
-                            title: 'Total Payments',
-                            value: '\$89,000',
-                          ),
-                          DashboardMetric(
-                            title: 'Total Profit',
-                            value: '\$12,500',
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20),
+                      GridView.count(
+                          shrinkWrap: true,
+                          crossAxisCount: 4,
+                          crossAxisSpacing: 16.0,
+                          mainAxisSpacing: 16.0,
+                          childAspectRatio: 2.0, // Adjust as needed
+                          physics: const NeverScrollableScrollPhysics(), // Disable scrolling
+                          // ignore: prefer_const_literals_to_create_immutables
+                          children: [
+                            const DashboardMetric(
+                              title: 'Loan Clients',
+                              value: '123',
+                            ),
+                            const DashboardMetric(
+                              title: 'Total Loans',
+                              value: '456',
+                            ),
+                            const DashboardMetric(
+                              title: 'Total Payments',
+                              value: '\$89,000',
+                            ),const DashboardMetric(
+                              title: 'Total Payments',
+                              value: '\$89,000',
+                            ),
+                            const DashboardMetric(
+                              title: 'Total Profit',
+                              value: '\$12,500',
+                            ),
+                          ],
+                        ),
+
+                      const SizedBox(height: 20),
                       // Recent Transactions
-                      Text(
+                      const Text(
                         'Recent Transactions',
                         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Expanded(
                         child: Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey),
                           ),
-                          child: ListView.builder(
-                            itemCount: 10, // Number of transactions
-                            itemBuilder: (context, index) {
-                              return ListTile(
-                                title: Text('Transaction #${index + 1}'),
-                                subtitle: Text('Date: 2024-09-29'),
-                                trailing: Text('\$100'),
-                              );
-                            },
-                          ),
+                          child: TransactionsPage(),
                         ),
                       ),
                     ],
@@ -210,7 +185,7 @@ class DashboardMetric extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(14.0),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
@@ -219,7 +194,7 @@ class DashboardMetric extends StatelessWidget {
               color: Colors.grey.withOpacity(0.3),
               spreadRadius: 2,
               blurRadius: 5,
-              offset: Offset(0, 3), // changes position of shadow
+              offset: const Offset(0, 3), // changes position of shadow
             ),
           ],
         ),
@@ -227,12 +202,12 @@ class DashboardMetric extends StatelessWidget {
           children: [
             Text(
               value,
-              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               title,
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+              style: const TextStyle(fontSize: 16, color: Colors.grey),
             ),
           ],
         ),

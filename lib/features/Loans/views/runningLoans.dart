@@ -13,7 +13,7 @@ class RunningLoansPage extends StatelessWidget {
       if (scrollController.position.pixels == scrollController.position.maxScrollExtent &&
           !loanController.isLoading.value &&
           loanController.currentPage.value < loanController.totalPages.value) {
-        loanController.fetchPendingLoans(page: loanController.currentPage.value + 1);
+        loanController.fetchRunningLoans(page: loanController.currentPage.value + 1);
       }
     });
   }
@@ -22,9 +22,9 @@ class RunningLoansPage extends StatelessWidget {
   Widget buildLoanList() {
     return ListView.builder(
       controller: scrollController,
-      itemCount: loanController.loans.length,
+      itemCount: loanController.runningLoans.length,
       itemBuilder: (context, index) {
-        final loan = loanController.loans[index];
+        final loan = loanController.runningLoans[index];
         return Card(
           margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
           child: Padding(
@@ -113,47 +113,47 @@ class RunningLoansPage extends StatelessWidget {
         child: Column(
           children: <Widget>[
             // Search Bar
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: searchController,
-                    decoration: const InputDecoration(
-                      labelText: 'Search by Agent Name',
-                      border: OutlineInputBorder(),
-                    ),
-                    onSubmitted: (value) {
-                      loanController.searchQuery.value = value;
-                      loanController.fetchPendingLoans(page: 1);
-                    },
-                  ),
-                ),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    loanController.searchQuery.value = searchController.text;
-                    loanController.fetchPendingLoans(page: 1);
-                  },
-                  child: const Text('Search'),
-                ),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    searchController.clear();
-                    loanController.clearSearch();
-                    loanController.fetchPendingLoans(page: 1);
-                  },
-                  child: const Text('Clear'),
-                ),
-              ],
-            ),
+            // Row(
+            //   children: [
+            //     Expanded(
+            //       child: TextField(
+            //         controller: searchController,
+            //         decoration: const InputDecoration(
+            //           labelText: 'Search by Agent Name',
+            //           border: OutlineInputBorder(),
+            //         ),
+            //         onSubmitted: (value) {
+            //           loanController.searchQuery.value = value;
+            //           loanController.fetchRunningLoans(page: 1);
+            //         },
+            //       ),
+            //     ),
+            //     const SizedBox(width: 10),
+            //     ElevatedButton(
+            //       onPressed: () {
+            //         loanController.searchQuery.value = searchController.text;
+            //         loanController.fetchRunningLoans(page: 1);
+            //       },
+            //       child: const Text('Search'),
+            //     ),
+            //     const SizedBox(width: 10),
+            //     ElevatedButton(
+            //       onPressed: () {
+            //         searchController.clear();
+            //         loanController.clearSearch();
+            //         loanController.fetchRunningLoans(page: 1);
+            //       },
+            //       child: const Text('Clear'),
+            //     ),
+            //   ],
+            // ),
             const SizedBox(height: 20),
             // Loan List or Loading Indicator
             Expanded(
               child: Obx(() {
-                if (loanController.isLoading.value && loanController.loans.isEmpty) {
+                if (loanController.isLoading.value && loanController.runningLoans.isEmpty) {
                   return const Center(child: CircularProgressIndicator());
-                } else if (loanController.loans.isEmpty) {
+                } else if (loanController.runningLoans.isEmpty) {
                   return const Center(child: Text('No pending loans found.'));
                 } else {
                   return buildLoanList();
@@ -162,7 +162,7 @@ class RunningLoansPage extends StatelessWidget {
             ),
             // Pagination Loading Indicator
             Obx(() {
-              if (loanController.isLoading.value && loanController.loans.isNotEmpty) {
+              if (loanController.isLoading.value && loanController.runningLoans.isNotEmpty) {
                 return const Padding(
                   padding: EdgeInsets.all(8.0),
                   child: CircularProgressIndicator(),

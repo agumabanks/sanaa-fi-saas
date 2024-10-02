@@ -76,7 +76,7 @@ class LoanDashboard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       DashboardMetric(
-                        title: 'New Clients',
+                        title: 'Loan Clients',
                         value: '123',
                       ),
                       DashboardMetric(

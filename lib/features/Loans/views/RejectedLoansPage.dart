@@ -3,18 +3,17 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sanaa_fi_saas/features/Loans/controllers/allLoansControllers.dart';
  
-class PendingLoansPage extends StatelessWidget {
+class RejectedLoansPage extends StatelessWidget {
   final AllLoansController loanController = Get.put(AllLoansController(loanRepo: Get.find())); // Inject the controller
   final TextEditingController searchController = TextEditingController();
   final ScrollController scrollController = ScrollController();
 
-  PendingLoansPage({Key? key}) : super(key: key) {
-    // Infinite scroll listener to load more loans when reaching the bottom
+  RejectedLoansPage({Key? key}) : super(key: key) {
     scrollController.addListener(() {
       if (scrollController.position.pixels == scrollController.position.maxScrollExtent &&
           !loanController.isLoading.value &&
-          loanController.currentPage.value < loanController.totalPages.value) {
-        loanController.fetchPendingLoans(page: loanController.currentPage.value + 1);
+          loanController.currentRejectedPage.value < loanController.totalPages.value) {
+        loanController.fetchRejectedLoans(page: loanController.currentRejectedPage.value + 1);
       }
     });
   }
@@ -23,9 +22,9 @@ class PendingLoansPage extends StatelessWidget {
   Widget buildLoanList() {
     return ListView.builder(
       controller: scrollController,
-      itemCount: loanController.pendingLoans.length,
+      itemCount: loanController.rejectedLoans.length,
       itemBuilder: (context, index) {
-        final loan = loanController.pendingLoans[index];
+        final loan = loanController.rejectedLoans[index];
         return Card(
           margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
           child: Padding(
@@ -125,7 +124,7 @@ class PendingLoansPage extends StatelessWidget {
             //         ),
             //         onSubmitted: (value) {
             //           loanController.searchQuery.value = value;
-            //           loanController.fetchPendingLoans(page: 1);
+            //           loanController.fetchRejectedLoans(page: 1);
             //         },
             //       ),
             //     ),
@@ -133,7 +132,7 @@ class PendingLoansPage extends StatelessWidget {
             //     ElevatedButton(
             //       onPressed: () {
             //         loanController.searchQuery.value = searchController.text;
-            //         loanController.fetchPendingLoans(page: 1);
+            //         loanController.fetchRejectedLoans(page: 1);
             //       },
             //       child: const Text('Search'),
             //     ),
@@ -142,7 +141,7 @@ class PendingLoansPage extends StatelessWidget {
             //       onPressed: () {
             //         searchController.clear();
             //         loanController.clearSearch();
-            //         loanController.fetchPendingLoans(page: 1);
+            //         loanController.fetchRejectedLoans(page: 1);
             //       },
             //       child: const Text('Clear'),
             //     ),
@@ -152,10 +151,10 @@ class PendingLoansPage extends StatelessWidget {
             // Loan List or Loading Indicator
             Expanded(
               child: Obx(() {
-                if (loanController.isLoading.value && loanController.loans.isEmpty) {
+                if (loanController.isLoading.value && loanController.rejectedLoans.isEmpty) {
                   return const Center(child: CircularProgressIndicator());
-                } else if (loanController.loans.isEmpty) {
-                  return const Center(child: Text('No pending loans found.'));
+                } else if (loanController.rejectedLoans.isEmpty) {
+                  return const Center(child: Text('No Rejected loans found.'));
                 } else {
                   return buildLoanList();
                 }
@@ -163,7 +162,7 @@ class PendingLoansPage extends StatelessWidget {
             ),
             // Pagination Loading Indicator
             Obx(() {
-              if (loanController.isLoading.value && loanController.loans.isNotEmpty) {
+              if (loanController.isLoading.value && loanController.rejectedLoans.isNotEmpty) {
                 return const Padding(
                   padding: EdgeInsets.all(8.0),
                   child: CircularProgressIndicator(),
