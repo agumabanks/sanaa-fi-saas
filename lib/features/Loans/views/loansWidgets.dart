@@ -157,8 +157,8 @@ class LoansHome extends StatelessWidget {
                       Expanded(
                         child: Container(
                           decoration: BoxDecoration(
-    border: Border.all(color: Colors.grey, ), // Set border color and width
-                            borderRadius: BorderRadius.circular(18),
+                          border: Border.all(color: const Color.fromARGB(163, 158, 158, 158), ), // Set border color and width
+                            borderRadius: BorderRadius.circular(16),
                           ),
                             clipBehavior: Clip.antiAlias, // Ensures child content respects the rounded corners
 
