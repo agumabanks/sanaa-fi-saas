@@ -7,9 +7,14 @@ import 'package:sanaa_fi_saas/features/Loans/controllers/allLoansControllers.dar
 import 'package:sanaa_fi_saas/features/Loans/controllers/loans_dashboard_controller.dart';
 import 'package:sanaa_fi_saas/features/Loans/controllers/transaction_history_controller.dart';
 import 'package:sanaa_fi_saas/features/Loans/data/loansRepo.dart';
+import 'package:sanaa_fi_saas/features/Reports/controllers/report_controller.dart';
+import 'package:sanaa_fi_saas/features/Reports/data/reportsRepo.dart';
 import 'package:sanaa_fi_saas/features/clients/controller/ClientController.dart';
 import 'package:sanaa_fi_saas/features/clients/controller/client_profile_controller.dart';
 import 'package:sanaa_fi_saas/features/clients/data/client_repo.dart';
+import 'package:sanaa_fi_saas/features/expense/controllers/CashflowsController.dart';
+import 'package:sanaa_fi_saas/features/expense/controllers/ExpensesController.dart';
+import 'package:sanaa_fi_saas/features/expense/data/expenseRepo.dart';
 import 'package:sanaa_fi_saas/features/home/controllers/ContentController.dart';
 import 'package:sanaa_fi_saas/features/home/views/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,30 +40,29 @@ Future<void> main() async {
         uniqueId: uniqueId,
       ));
 
-  // Register Repositories (Repo must be registered before Controllers)
-  // Get.lazyPut<ClientRepo>(() => ClientRepo(apiClient: Get.find<ApiClient>()));
-  // Get.lazyPut<LoanRepo>(() => LoanRepo(apiClient: Get.find<ApiClient>())); // Register LoanRepo here
-
-  // // Register Controllers
-  // Get.lazyPut<ClientController>(() => ClientController(clientRepo: Get.find<ClientRepo>()));
-  // Get.lazyPut<ClientProfileController>(() => ClientProfileController(clientRepo: Get.find<ClientRepo>()));
-  // Get.lazyPut<ContentController>(() => ContentController());
-  // Get.lazyPut<LoanController>(() => LoanController(loanRepo: Get.find<LoanRepo>()));
-
+ 
 
    // Register Repositories
   Get.lazyPut<ClientRepo>(() => ClientRepo(apiClient: Get.find<ApiClient>()));
+  Get.lazyPut<ExpenseRepo>(() => ExpenseRepo(apiClient: Get.find<ApiClient>()));
   // Get.lazyPut<LoanRepo>(() => LoanRepo(apiClient: Get.find<ApiClient>()));
   Get.lazyPut(() => LoanRepo(apiClient: Get.find()));
+   Get.lazyPut(() => ReportRepo(apiClient: Get.find()));
 
 
-  // Register Controllers
+  // Register Controllers ReportRepo
   Get.lazyPut(()=>ClientProfileController(clientRepo: Get.find()));
   Get.lazyPut<ClientController>(() => ClientController(clientRepo: Get.find<ClientRepo>()));
   Get.put<TransactionHistoryController>(TransactionHistoryController(loanRepo: Get.find()));
 
   // DashboardController
   Get.put<DashboardController>(DashboardController(loanRepo: Get.find()));
+
+  Get.put<CashflowsController>(CashflowsController(expenseRepo: Get.find()));
+  Get.put<ExpensesController>(ExpensesController(expenseRepo: Get.find()));
+
+  //   final ReportController reportController = Get.put(ReportController(reportRepo: ReportRepo(apiClient: ApiClient())));
+  Get.put<ReportController>(ReportController(reportRepo: Get.find()));
 
 
 

@@ -92,10 +92,104 @@ class LoansPlansPage extends StatelessWidget {
   }
 }
 
-
-
 class LoansHome extends StatelessWidget {
-  const LoansHome({super.key});
+  LoansHome({super.key});
+  final DashboardController controller = Get.find<DashboardController>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Padding(
+        padding: const EdgeInsets.only(top: 16, bottom: 0),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            color: const Color.fromARGB(188, 237, 237, 237),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Metrics Section
+                Obx(() {
+                  if (controller.isLoading.value) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  if (controller.errorMessage.value.isNotEmpty) {
+                    return Center(child: Text(controller.errorMessage.value));
+                  }
+
+                  return Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: GridView.count(
+                      shrinkWrap: true, // Important to prevent overflow
+                      crossAxisCount: 4, // Adjust as needed
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                      childAspectRatio: 2.0, // Adjust if necessary
+                      physics: const NeverScrollableScrollPhysics(), // Disable scrolling
+                      children: [
+                        DashboardMetric(
+                          title: 'Loan Clients',
+                          value: controller.totalClients.value.toString(),
+                        ),
+                        DashboardMetric(
+                          title: 'Active Loans',
+                          value: controller.totalActiveLoans.value.toString(),
+                        ),
+                        DashboardMetric(
+                          title: 'Pending Loans',
+                          value: controller.totalPendingLoans.value.toString(),
+                        ),
+                        DashboardMetric(
+                          title: 'Running Loans',
+                          value: controller.totalRunningLoans.value.toString(),
+                        ),
+                        DashboardMetric(
+                          title: 'Total Amount in Loans',
+                          value: controller.totalAmountInLoans.value,
+                        ),
+                        // Add more DashboardMetric widgets if needed
+                      ],
+                    ),
+                  );
+                }),
+
+                const SizedBox(height: 20),
+                
+                // Recent Transactions Section
+                const SizedBox(height: 10),
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: const Color.fromARGB(163, 158, 158, 158),
+                      ), // Set border color and width
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    clipBehavior: Clip.antiAlias, // Ensures child content respects the rounded corners
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(18), // Apply the same rounding to child content
+                      child: TransactionsPage(),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+class LoansHome10 extends StatelessWidget {
+   LoansHome10({super.key});
+ final DashboardController controller = Get.find<DashboardController>();
 
   @override
   Widget build(BuildContext context) {
@@ -117,37 +211,83 @@ class LoansHome extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Metrics Section
-                      DashboardMetricItems(),
-                      // GridView.count(
-                      //     shrinkWrap: true,
-                      //     crossAxisCount: 4,
-                      //     crossAxisSpacing: 16.0,
-                      //     mainAxisSpacing: 16.0,
-                      //     childAspectRatio: 2.0, // Adjust as needed
-                      //     physics: const NeverScrollableScrollPhysics(), // Disable scrolling
-                      //     // ignore: prefer_const_literals_to_create_immutables
-                      //     children: [
-                      //       const DashboardMetric(
-                      //         title: 'Loan Clients',
-                      //         value: '123',
-                      //       ),
-                      //       const DashboardMetric(
-                      //         title: 'Total Loans',
-                      //         value: '456',
-                      //       ),
-                      //       const DashboardMetric(
-                      //         title: 'Total Payments',
-                      //         value: '\$89,000',
-                      //       ),const DashboardMetric(
-                      //         title: 'Total Payments',
-                      //         value: '\$89,000',
-                      //       ),
-                      //       const DashboardMetric(
-                      //         title: 'Total Profit',
-                      //         value: '\$12,500',
-                      //       ),
-                      //     ],
-                      //   ),
+
+                      // DashboardMetricItems(),
+                       Obx((){
+        if (controller.isLoading.value) {
+            return Center(child: CircularProgressIndicator());
+          }
+      
+          if (controller.errorMessage.value.isNotEmpty) {
+            return Center(child: Text(controller.errorMessage.value));
+          }
+      
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: GridView.count(
+              crossAxisCount: 4, // Adjust as needed
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+              children: [
+                DashboardMetric(
+                  title: 'Loan Clients',
+                  value: controller.totalClients.value.toString(),
+                ),
+                DashboardMetric(
+                  title: 'Active Loans',
+                  value: controller.totalActiveLoans.value.toString(),
+                ),
+                DashboardMetric(
+                  title: 'Pending Loans',
+                  value: controller.totalPendingLoans.value.toString(),
+                ),
+                DashboardMetric(
+                  title: 'Running Loans',
+                  value: controller.totalRunningLoans.value.toString(),
+                ),
+                DashboardMetric(
+                  title: 'Total Amount in Loans',
+                  value: controller.totalAmountInLoans.value,
+                ),
+                // Add more DashboardMetric widgets if needed
+              ],
+            ),
+          );
+        
+      }),
+   
+
+
+                      GridView.count(
+                          shrinkWrap: true,
+                          crossAxisCount: 4,
+                          crossAxisSpacing: 16.0,
+                          mainAxisSpacing: 16.0,
+                          childAspectRatio: 2.0, // Adjust as needed
+                          physics: const NeverScrollableScrollPhysics(), // Disable scrolling
+                          // ignore: prefer_const_literals_to_create_immutables
+                          children: [
+                            const DashboardMetric(
+                              title: 'Loan Clients',
+                              value: '123',
+                            ),
+                            const DashboardMetric(
+                              title: 'Total Loans',
+                              value: '456',
+                            ),
+                            const DashboardMetric(
+                              title: 'Total Payments',
+                              value: '\$89,000',
+                            ),const DashboardMetric(
+                              title: 'Total Payments',
+                              value: '\$89,000',
+                            ),
+                            const DashboardMetric(
+                              title: 'Total Profit',
+                              value: '\$12,500',
+                            ),
+                          ],
+                        ),
 
                       const SizedBox(height: 20),
                       // Recent Transactions
@@ -182,54 +322,58 @@ class LoansHome extends StatelessWidget {
 
 
 // dash metrix
+
 class DashboardMetricItems extends StatelessWidget {
    DashboardMetricItems({super.key});
   final DashboardController controller = Get.find<DashboardController>();
 
   @override
   Widget build(BuildContext context) {
-    return Obx((){
-      if (controller.isLoading.value) {
-          return Center(child: CircularProgressIndicator());
-        }
-
-        if (controller.errorMessage.value.isNotEmpty) {
-          return Center(child: Text(controller.errorMessage.value));
-        }
-
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: GridView.count(
-            crossAxisCount: 4, // Adjust as needed
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
-            children: [
-              DashboardMetric(
-                title: 'Loan Clients',
-                value: controller.totalClients.value.toString(),
-              ),
-              DashboardMetric(
-                title: 'Active Loans',
-                value: controller.totalActiveLoans.value.toString(),
-              ),
-              DashboardMetric(
-                title: 'Pending Loans',
-                value: controller.totalPendingLoans.value.toString(),
-              ),
-              DashboardMetric(
-                title: 'Running Loans',
-                value: controller.totalRunningLoans.value.toString(),
-              ),
-              DashboardMetric(
-                title: 'Total Amount in Loans',
-                value: controller.totalAmountInLoans.value,
-              ),
-              // Add more DashboardMetric widgets if needed
-            ],
-          ),
-        );
+    return Scaffold(
+      body: 
+      Obx((){
+        if (controller.isLoading.value) {
+            return Center(child: CircularProgressIndicator());
+          }
       
-    });
+          if (controller.errorMessage.value.isNotEmpty) {
+            return Center(child: Text(controller.errorMessage.value));
+          }
+      
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: GridView.count(
+              crossAxisCount: 4, // Adjust as needed
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+              children: [
+                DashboardMetric(
+                  title: 'Loan Clients',
+                  value: controller.totalClients.value.toString(),
+                ),
+                DashboardMetric(
+                  title: 'Active Loans',
+                  value: controller.totalActiveLoans.value.toString(),
+                ),
+                DashboardMetric(
+                  title: 'Pending Loans',
+                  value: controller.totalPendingLoans.value.toString(),
+                ),
+                DashboardMetric(
+                  title: 'Running Loans',
+                  value: controller.totalRunningLoans.value.toString(),
+                ),
+                DashboardMetric(
+                  title: 'Total Amount in Loans',
+                  value: controller.totalAmountInLoans.value,
+                ),
+                // Add more DashboardMetric widgets if needed
+              ],
+            ),
+          );
+        
+      }),
+    );
   }
 }
 
@@ -255,22 +399,24 @@ class DashboardMetric extends StatelessWidget {
               color: Colors.grey.withOpacity(0.3),
               spreadRadius: 2,
               blurRadius: 5,
-              offset: const Offset(0, 3), // changes position of shadow
+              offset: const Offset(0, 1), // changes position of shadow
             ),
           ],
         ),
-        child: Column(
-          children: [
-            Text(
-              value,
-              style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              title,
-              style: const TextStyle(fontSize: 16, color: Colors.grey),
-            ),
-          ],
+        child: Center(
+          child: Column(
+            children: [
+              Text(
+                value,
+                style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                title,
+                style: const TextStyle(fontSize: 16, color: Colors.grey),
+              ),
+            ],
+          ),
         ),
       ),
     );

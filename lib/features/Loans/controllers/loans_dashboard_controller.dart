@@ -54,10 +54,10 @@ class DashboardController extends GetxController {
     double? parsedAmount = double.tryParse(amount);
     if (parsedAmount != null) {
       // Format to currency, e.g., $132,386,458.90
-      return '\$${parsedAmount.toStringAsFixed(2)}'.replaceAllMapped(
+      return '${parsedAmount.toStringAsFixed(0)}  /='.replaceAllMapped(
           RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},');
     } else {
-      return '\$0.00';
+      return '0.0 /=';
     }
   }
 }
