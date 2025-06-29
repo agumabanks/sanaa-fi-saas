@@ -1,0 +1,7 @@
+version: 1
+language: dart
+setup: .codex/setup.sh
+run:   .codex/run_tests.sh
+tests:
+  - pattern: test/**_test.dart
+timeout: 180
