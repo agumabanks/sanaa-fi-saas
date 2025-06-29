@@ -4,14 +4,17 @@ import 'package:flutter/cupertino.dart';
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:sanaa_fi_saas/data/api/api_client.dart';
 import 'package:sanaa_fi_saas/data/model/response/user_data.dart';
 import 'package:sanaa_fi_saas/utils/app_constants.dart';
 
 
 class AuthRepo extends GetxService{
-   final ApiClient apiClient;
+  final ApiClient apiClient;
   final SharedPreferences sharedPreferences;
+  final GetStorage desktopStorage = GetStorage();
+
   AuthRepo({required this.apiClient, required this.sharedPreferences});
 
 
@@ -198,9 +201,61 @@ class AuthRepo extends GetxService{
 
    void removeUserData()=> sharedPreferences.remove(AppConstants.userData);
 
-   String getUserData() {
-     return sharedPreferences.getString(AppConstants.userData) ?? '';
-   }
+  String getUserData() {
+    return sharedPreferences.getString(AppConstants.userData) ?? '';
+  }
+
+  // ---------------- Desktop Authentication -----------------
+  Future<Response> desktopLogin({String? email, String? password, bool rememberMe = false, String? deviceFingerprint}) async {
+    return await apiClient.postData(AppConstants.desktopLogin, {
+      'email': email,
+      'password': password,
+      'remember_me': rememberMe,
+      'device_fingerprint': deviceFingerprint,
+    });
+  }
+
+  Future<Response> desktopLogout() async {
+    return await apiClient.postData(AppConstants.desktopLogout, {});
+  }
+
+  Future<Response> desktopLogoutAll() async {
+    return await apiClient.postData(AppConstants.desktopLogoutAll, {});
+  }
+
+  Future<Response> refreshDesktopToken() async {
+    return await apiClient.postData(AppConstants.desktopRefresh, {});
+  }
+
+  Future<Response> verifyDesktopToken() async {
+    return await apiClient.getData(AppConstants.desktopVerify);
+  }
+
+  Future<Response> getSessionInfo() async {
+    return await apiClient.getData(AppConstants.desktopSession);
+  }
+
+  Future<bool> saveDesktopToken(String token, int sessionId) async {
+    apiClient.token = token;
+    apiClient.updateHeader(token);
+    desktopStorage.write(AppConstants.desktopAuthToken, token);
+    desktopStorage.write(AppConstants.desktopSessionId, sessionId);
+    return true;
+  }
+
+  String? getDesktopToken() {
+    return desktopStorage.read(AppConstants.desktopAuthToken);
+  }
+
+  int? getSessionId() {
+    return desktopStorage.read(AppConstants.desktopSessionId);
+  }
+
+  Future<void> clearDesktopAuth() async {
+    await desktopStorage.remove(AppConstants.desktopAuthToken);
+    await desktopStorage.remove(AppConstants.desktopSessionId);
+    await desktopStorage.remove(AppConstants.desktopUserEmail);
+  }
 
 
 
