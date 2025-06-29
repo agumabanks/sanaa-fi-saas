@@ -21,6 +21,8 @@ import 'package:sanaa_fi_saas/features/home/views/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:sanaa_fi_saas/helper/network_info.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -75,6 +77,10 @@ Future<void> main() async {
     Get.lazyPut(() => LoanController(loanRepo: Get.find()));
     Get.lazyPut(() => AllLoansController(loanRepo: Get.find()));
       // Get.lazyPut(() => NotificationController(notificationRepo: Get.find()));
+
+  // Initialize connectivity checker
+  final networkInfo = Get.put(NetworkInfo(Connectivity()));
+  networkInfo.initConnectionCheck();
 
 
 

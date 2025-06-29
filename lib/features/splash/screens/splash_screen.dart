@@ -27,11 +27,26 @@ class _SplashScreenState extends State<SplashScreen> with WidgetsBindingObserver
 
     bool isFirstTime = true;
 
-     subscription = Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> result) async {
-      if(await ApiChecker.isVpnActive()) {
-        showCustomSnackBarHelper('you are using vpn', isVpn: true, duration: const Duration(minutes: 10));
+    // Check current connectivity status and warn if offline
+    Connectivity().checkConnectivity().then((result) {
+      if (result == ConnectivityResult.none) {
+        showCustomSnackBarHelper('No internet connection');
       }
-      if(isFirstTime) {
+    });
+
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((List<ConnectivityResult> result) async {
+      if (await ApiChecker.isVpnActive()) {
+        showCustomSnackBarHelper('you are using vpn',
+            isVpn: true, duration: const Duration(minutes: 10));
+      }
+      bool connected =
+          result.isNotEmpty && result.first != ConnectivityResult.none;
+      if (!connected) {
+        showCustomSnackBarHelper('No internet connection');
+      }
+      if (isFirstTime) {
         isFirstTime = false;
         await _route();
       }
@@ -45,6 +60,7 @@ class _SplashScreenState extends State<SplashScreen> with WidgetsBindingObserver
 
   @override
   void dispose() {
+    subscription.cancel();
     super.dispose();
   }
 
