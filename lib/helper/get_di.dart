@@ -26,7 +26,7 @@ Future<Map<String, Map<String, String>>> init() async {
     appBaseUrl: AppConstants.baseUrl,
     sharedPreferences: Get.find(),
     uniqueId: Get.find(),
-    deiceInfo: Get.find(),
+    deviceInfo: Get.find(),
   ));
 
   // Repository

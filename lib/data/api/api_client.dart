@@ -15,7 +15,7 @@ class ApiClient extends GetxService {
   final SharedPreferences sharedPreferences;
   final String noInternetMessage = 'Connection to API server failed due to internet connection';
   final int timeoutInSeconds = 30;
-  BaseDeviceInfo deiceInfo;
+  BaseDeviceInfo deviceInfo;
   final String uniqueId;
   String? token;
   Map<String, String>? _mainHeaders;
@@ -23,7 +23,7 @@ class ApiClient extends GetxService {
   ApiClient({
     required this.appBaseUrl,
     required this.sharedPreferences,
-    required this.deiceInfo,
+    required this.deviceInfo,
     required this.uniqueId,
 
   })
@@ -34,11 +34,11 @@ class ApiClient extends GetxService {
       'Authorization': 'Bearer $token',
     };
 
-    if(('${deiceInfo.data['isPhysicalDevice']}' == 'true') || AppConstants.demo) {
+    if(('${deviceInfo.data['isPhysicalDevice']}' == 'true') || AppConstants.demo) {
       _mainHeaders!.addAll({
         'device-id': uniqueId,
         'os': GetPlatform.isAndroid ? 'android' : 'ios',
-        'device-model': '${deiceInfo.data['brand']} ${deiceInfo.data['model']}'
+        'device-model': '${deviceInfo.data['brand']} ${deviceInfo.data['model']}'
       });
     }
   }
@@ -49,13 +49,13 @@ class ApiClient extends GetxService {
        'Authorization': 'Bearer $token',
      };
 
-     if(('${deiceInfo.data['isPhysicalDevice']}' == 'true') || AppConstants.demo) {
+     if(('${deviceInfo.data['isPhysicalDevice']}' == 'true') || AppConstants.demo) {
        _mainHeaders!.addAll({
          'device-id': uniqueId,
          'os': GetPlatform.isAndroid ? 'android' : 'ios',
          'device-model': '${GetPlatform.isAndroid
-             ? '${deiceInfo.data['brand']} ${deiceInfo.data['device-model']}'
-             : ''} ${deiceInfo.data['model']}'.replaceAll(' null ', ' ')
+             ? '${deviceInfo.data['brand']} ${deviceInfo.data['device-model']}'
+             : ''} ${deviceInfo.data['model']}'.replaceAll(' null ', ' ')
        });
      }
    }

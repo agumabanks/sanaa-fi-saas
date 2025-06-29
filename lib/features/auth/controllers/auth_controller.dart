@@ -34,10 +34,7 @@ import 'package:sanaa_fi_saas/helper/route_helper.dart';
 import 'package:sanaa_fi_saas/utils/app_constants.dart';
 import 'package:sanaa_fi_saas/helper/custom_snackbar_helper.dart';
 
-import 'dart:convert';  // For json encoding and decoding
-import 'package:http/http.dart' as http;  // Import http package for making HTTP requests
-import 'package:get/get.dart';
-import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http; // Import http package for making HTTP requests
 class AuthController extends GetxController implements GetxService {
   final AuthRepo authRepo;
   AuthController({required this.authRepo}) {
