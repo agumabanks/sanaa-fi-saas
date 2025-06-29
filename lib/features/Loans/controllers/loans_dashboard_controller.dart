@@ -6,10 +6,10 @@ import 'package:sanaa_fi_saas/features/Loans/data/loansRepo.dart';
 // import 'package:sanaa_fi_saas/models/dashboard_stats.dart';
 // import 'package:sanaa_fi_saas/repositories/loan_repo.dart';
 
-class DashboardController extends GetxController {
+class LoansDashboardController extends GetxController {
   final LoanRepo loanRepo;
 
-  DashboardController({required this.loanRepo});
+  LoansDashboardController({required this.loanRepo});
 
   // Observable variables
   var totalClients = 0.obs;
