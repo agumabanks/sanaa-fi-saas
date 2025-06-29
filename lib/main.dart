@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -16,6 +17,9 @@ import 'package:sanaa_fi_saas/features/clients/data/client_repo.dart';
 import 'package:sanaa_fi_saas/features/expense/data/expenseRepo.dart';
 import 'package:sanaa_fi_saas/features/auth/domain/reposotories/auth_repo.dart';
 import 'package:sanaa_fi_saas/features/splash/domain/reposotories/splash_repo.dart';
+
+import 'package:sanaa_fi_saas/features/expense/controllers/ExpensesController.dart';
+import 'package:sanaa_fi_saas/features/auth/domain/reposotories/auth_repo.dart';
 
 // Controller imports
 import 'package:sanaa_fi_saas/features/Loans/controllers/LoanController.dart';
@@ -67,6 +71,9 @@ Future<void> _initializeDependencies(
 
   // Register NetworkInfo
   Get.lazyPut<NetworkInfo>(() => NetworkInfoImpl());
+  
+  // In your initialization function
+  Get.put<NetworkInfo>(NetworkInfo(Connectivity()));
 
   // Register Repositories
   Get.lazyPut<AuthRepo>(() => AuthRepo(
