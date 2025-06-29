@@ -7,6 +7,7 @@ class AppConstants {
   static const String appName = 'Field Agent';
   // static const String baseUrl = 'https://finmicro.sanaa.co';
   static const String baseUrl = 'https://lendsup.sanaa.co';
+  static const String apiPath = '/api/v1';
   static const bool demo = false;
   static const double appVersion = 4.3;
 

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sanaa_fi_saas/features/clients/controller/client_profile_controller.dart';
 import 'package:sanaa_fi_saas/features/clients/data/client_profile.dart';
+import 'package:sanaa_fi_saas/utils/app_constants.dart';
 
 class ClientProfile extends StatelessWidget {
   ClientProfile({Key? key}) : super(key: key);
@@ -71,7 +72,7 @@ class ClientProfile extends StatelessWidget {
                         radius: 45,
                         backgroundImage: NetworkImage(
                           clientData.client?.clientPhoto ??
-                              'https://lendsup.sanaa.co/public/assets/admin/img/160x160/img1.jpg',
+                              '${AppConstants.baseUrl}/public/assets/admin/img/160x160/img1.jpg',
                         ),
                       ),
                       const SizedBox(width: 20),
@@ -278,7 +279,7 @@ class ClientProfile extends StatelessWidget {
         CircleAvatar(
           radius: 35,
           backgroundImage: NetworkImage(
-            agent.imageFullpath ?? 'https://lendsup.sanaa.co/public/assets/admin/img/160x160/img1.jpg',
+            agent.imageFullpath ?? '${AppConstants.baseUrl}/public/assets/admin/img/160x160/img1.jpg',
           ),
         ),
         const SizedBox(width: 10),
