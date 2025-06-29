@@ -26,7 +26,8 @@ class CustomLargeButtonWidget extends StatelessWidget {
       child: TextButton(
         onPressed: onTap as void Function()?,
         style: TextButton.styleFrom(
-          minimumSize: MediaQuery.of(context).size,
+          minimumSize: Size(MediaQuery.of(context).size.width,
+              MediaQuery.of(context).size.height * 0.5),
           padding: const EdgeInsets.symmetric(
               vertical: Dimensions.paddingSizeDefault),
           backgroundColor: backgroundColor,

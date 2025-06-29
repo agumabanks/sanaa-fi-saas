@@ -9,7 +9,7 @@ class NoDataFoundScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return fromHome! ?  noDataWidget(context) : SizedBox(height: MediaQuery.of(context).size.height * 0.6, child: noDataWidget(context));
+    return fromHome! ?  noDataWidget(context) : SizedBox(height: MediaQuery.of(context).size.height * 0.5, child: noDataWidget(context));
   }
 
   Padding noDataWidget(BuildContext context) {

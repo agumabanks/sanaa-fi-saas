@@ -79,7 +79,8 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GetBuilder<AuthController>(builder: (authController) => AbsorbPointer(
+      body: SafeArea(
+        child: GetBuilder<AuthController>(builder: (authController) => AbsorbPointer(
         absorbing: authController.isLoading,
         child: Stack(children: [
           Column(
