@@ -17,5 +17,6 @@ export PATH="$PWD/flutter/bin:$PATH"
 flutter config --enable-linux-desktop
 flutter doctor -v
 
-# ---------- restore project deps ----------
+# ---------- restore project deps 3----------
 flutter pub get
+ 
