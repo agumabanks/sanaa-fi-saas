@@ -129,7 +129,7 @@ class MyApp extends StatelessWidget {
       getPages: RouteHelper.routes,
       
       // Default transitions
-      defaultTransition: Transition.fade,
+      defaultTransition: Transition.fade, 
       transitionDuration: const Duration(milliseconds: 300),
       
       // Error handling
