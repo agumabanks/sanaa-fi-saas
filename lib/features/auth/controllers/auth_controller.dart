@@ -294,7 +294,7 @@ Future<void> getUserByPhone(String phone) async {
     print("_____________\n____Requesting customer by phone:__________\n__________\n__________\n__________\n");
 
     // Define the URL for the POST request
-    final url = Uri.parse('https://lendsup.sanaa.co/api/v1/getUserByPhone');
+    final url = Uri.parse('${AppConstants.baseUrl}${AppConstants.apiPath}/getUserByPhone');
 
     // Make the POST request, sending the phone number in the body
     final response = await http.post(

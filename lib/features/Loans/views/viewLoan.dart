@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sanaa_fi_saas/features/Loans/controllers/allLoansControllers.dart';
+import 'package:sanaa_fi_saas/utils/app_constants.dart';
 
 class ViewLoan extends StatelessWidget {
   final AllLoansController loanController = Get.find<AllLoansController>();
@@ -60,7 +61,7 @@ class ViewLoan extends StatelessWidget {
               radius: 22,
               backgroundImage: client.clientPhoto != null
                   ? NetworkImage(client.clientPhoto)  // Client's photo
-                  : const NetworkImage('https://lendsup.sanaa.co/public/assets/admin/img/160x160/img1.jpg'),
+                  : NetworkImage(AppConstants.baseUrl + '/public/assets/admin/img/160x160/img1.jpg'),
             ),
             const SizedBox(width: 10),
             Text(client.name ?? 'Client', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),

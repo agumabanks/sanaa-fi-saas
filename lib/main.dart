@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sanaa_fi_saas/data/api/api_client.dart';
+import 'package:sanaa_fi_saas/utils/app_constants.dart';
 import 'package:sanaa_fi_saas/features/Loans/controllers/LoanController.dart';
 import 'package:sanaa_fi_saas/features/Loans/controllers/allLoansControllers.dart';
 import 'package:sanaa_fi_saas/features/Loans/controllers/loans_dashboard_controller.dart';
@@ -34,7 +35,7 @@ Future<void> main() async {
 
   // Register ApiClient
   Get.lazyPut<ApiClient>(() => ApiClient(
-        appBaseUrl: 'https://lendsup.sanaa.co/api/v1',
+        appBaseUrl: AppConstants.baseUrl + AppConstants.apiPath,
         sharedPreferences: sharedPreferences,
         deiceInfo: deviceInfo,
         uniqueId: uniqueId,
