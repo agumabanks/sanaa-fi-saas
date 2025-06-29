@@ -14,7 +14,7 @@ import 'package:sanaa_fi_saas/features/Loans/data/loansRepo.dart';
 import 'package:sanaa_fi_saas/features/Reports/data/reportsRepo.dart';
 import 'package:sanaa_fi_saas/features/clients/data/client_repo.dart';
 import 'package:sanaa_fi_saas/features/expense/data/expenseRepo.dart';
-import 'package:sanaa_fi_saas/features/auth/domain/repositories/auth_repo.dart';
+import 'package:sanaa_fi_saas/features/auth/domain/reposotories/auth_repo.dart';
 import 'package:sanaa_fi_saas/features/splash/domain/reposotories/splash_repo.dart';
 
 // Controller imports
@@ -61,7 +61,7 @@ Future<void> _initializeDependencies(
   Get.lazyPut<ApiClient>(() => ApiClient(
         appBaseUrl: AppConstants.baseUrl + AppConstants.apiPath,
         sharedPreferences: sharedPreferences,
-        deiceInfo: deviceInfo,
+        deviceInfo: deviceInfo,
         uniqueId: uniqueId,
       ));
 
