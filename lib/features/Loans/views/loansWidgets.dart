@@ -94,7 +94,7 @@ class LoansPlansPage extends StatelessWidget {
 
 class LoansHome extends StatelessWidget {
   LoansHome({super.key});
-  final DashboardController controller = Get.find<DashboardController>();
+  final LoansDashboardController controller = Get.find<LoansDashboardController>();
 
   @override
   Widget build(BuildContext context) {
@@ -189,7 +189,7 @@ class LoansHome extends StatelessWidget {
 
 class LoansHome10 extends StatelessWidget {
    LoansHome10({super.key});
- final DashboardController controller = Get.find<DashboardController>();
+ final LoansDashboardController controller = Get.find<LoansDashboardController>();
 
   @override
   Widget build(BuildContext context) {
@@ -325,7 +325,7 @@ class LoansHome10 extends StatelessWidget {
 
 class DashboardMetricItems extends StatelessWidget {
    DashboardMetricItems({super.key});
-  final DashboardController controller = Get.find<DashboardController>();
+  final LoansDashboardController controller = Get.find<LoansDashboardController>();
 
   @override
   Widget build(BuildContext context) {
