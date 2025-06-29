@@ -133,4 +133,4 @@ class NetworkAwareAuthController extends DesktopAuthController {
     // TODO: listen to connectivity changes and handle offline mode
   }
 }
-*** End Patch
+

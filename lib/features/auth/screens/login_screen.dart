@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import '../controllers/desktop_auth_controller.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  const LoginScreen({super.key, String? countryCode, String? phoneNumber});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
