@@ -88,6 +88,14 @@ static const String payLoan = '/api/v1/loans/pay';
   static const String withdrawRequest = '/api/v1/customer/withdraw';
   static const String getWithdrawalRequest = '/api/v1/customer/withdrawal-requests';
 
+  // Desktop authentication endpoints
+  static const String desktopLogin = '/desktop-api/login';
+  static const String desktopLogout = '/desktop-api/logout';
+  static const String desktopLogoutAll = '/desktop-api/logout-all';
+  static const String desktopRefresh = '/desktop-api/refresh';
+  static const String desktopVerify = '/desktop-api/verify';
+  static const String desktopSession = '/desktop-api/session';
+
 
   // Shared Key
   static const String theme = 'theme';
@@ -116,6 +124,12 @@ static const String payLoan = '/api/v1/loans/pay';
   static const String biometricPin = 'biometric';
   static const String contactPermission = '';
   static const String userData = 'user';
+
+  // Desktop session storage keys
+  static const String desktopAuthToken = 'desktop_auth_token';
+  static const String desktopSessionId = 'desktop_session_id';
+  static const String desktopUserEmail = 'desktop_user_email';
+  static const String deviceFingerprint = 'device_fingerprint';
 
 
 

@@ -23,6 +23,10 @@ import 'package:uuid/uuid.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:sanaa_fi_saas/helper/network_info.dart';
+import 'package:desktop_window/desktop_window.dart';
+import 'dart:io';
+import 'features/auth/controllers/desktop_auth_controller.dart';
+import 'data/repository/auth_repo.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +34,11 @@ Future<void> main() async {
   // Initialize GetStorage and SharedPreferences
   await GetStorage.init();
   final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+    await DesktopWindow.setWindowSize(const Size(1280, 720));
+    await DesktopWindow.setMinWindowSize(const Size(800, 600));
+  }
 
   // Get device info and generate uniqueId
   final BaseDeviceInfo deviceInfo = await DeviceInfoPlugin().deviceInfo;
@@ -42,6 +51,9 @@ Future<void> main() async {
         deiceInfo: deviceInfo,
         uniqueId: uniqueId,
       ));
+
+  Get.lazyPut<AuthRepo>(() => AuthRepo(apiClient: Get.find<ApiClient>(), sharedPreferences: sharedPreferences));
+  Get.put(DesktopAuthController(authRepo: Get.find<AuthRepo>()));
 
  
 
@@ -82,9 +94,8 @@ Future<void> main() async {
   final networkInfo = Get.put(NetworkInfo(Connectivity()));
   networkInfo.initConnectionCheck();
 
-
-
-
+  final desktopAuth = Get.find<DesktopAuthController>();
+  await desktopAuth.checkExistingSession();
 
   runApp(MyApp());
 }

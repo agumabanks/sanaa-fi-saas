@@ -262,11 +262,21 @@ class ApiClient extends GetxService {
      }else if(response0.statusCode != 200 && response0.body == null) {
        response0 = Response(statusCode: 0, statusText: noInternetMessage);
      }
-     debugPrint('====> API Response: [${response0.statusCode}] $uri\n${response0.body}');
-     return response0;
-   }
+    debugPrint('====> API Response: [${response0.statusCode}] $uri\n${response0.body}');
+    return response0;
+  }
 
- }
+  // ---------------- Desktop Helpers -----------------
+  void updateDesktopHeaders(String token, String fingerprint) {
+    _mainHeaders?['Authorization'] = 'Bearer $token';
+    _mainHeaders?['X-Device-Fingerprint'] = fingerprint;
+  }
+
+  void setupAuthInterceptor() {
+    // Placeholder for interceptor implementation
+  }
+
+}
 class MultipartBody {
   String key;
   File? file;

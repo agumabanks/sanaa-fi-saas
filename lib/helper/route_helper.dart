@@ -195,5 +195,23 @@
 //         phoneNumber: utf8.decode(base64Url.decode(Get.parameters['phone-number']!.replaceAll(' ', '+'))),)),
 
 //     ];
-
 // }
+
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../features/auth/controllers/desktop_auth_controller.dart';
+
+class RouteHelper {
+  static final middlewares = [
+    GetMiddleware(
+      priority: 0,
+      redirect: (route) {
+        final isAuthenticated = Get.find<DesktopAuthController>().isAuthenticated.value;
+        if (route?.settings.name == '/dashboard' && !isAuthenticated) {
+          return const RouteSettings(name: '/login');
+        }
+        return null;
+      },
+    ),
+  ];
+}
