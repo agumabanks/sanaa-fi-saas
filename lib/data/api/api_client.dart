@@ -15,6 +15,7 @@ class ApiClient extends GetxService {
   final SharedPreferences sharedPreferences;
   final String noInternetMessage = 'Connection to API server failed due to internet connection';
   final int timeoutInSeconds = 30;
+  // BaseDeviceInfo deviceInfo;
   BaseDeviceInfo deviceInfo;
   final String uniqueId;
   String? token;
